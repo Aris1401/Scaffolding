@@ -1,0 +1,41 @@
+#{if} language:java
+package #{namespace};
+#{endif}
+
+#{for} #{imports}
+#{if} language:java
+import #{imports};
+#{endif}
+
+#{if} language:dotnet
+using #{imports};
+#{endif}
+#{endfor}
+
+#{if} language:dotnet
+namespace #{namespace};
+#{endif}
+
+public class #{class_name} {
+    #{for} #{fields}
+    #{if} language:java
+    #{field:languageType} #{fields:columnName};
+    #{endif}
+
+    #{if} language:dotnet
+    public #{fields:columnType} #{fields:columnNamePascal} {set; get;}
+    #{endif}
+    #{endfor}
+
+    #{if} language:java
+    #{for} #{fields}
+    public void set#{fields:columnNamePascal}(#{fields:languageType} #{fields:columnName}) {
+        this.#{fields:columnName} = #{fields:columnName};
+    }
+
+    public #{fields:languageType} get#{fields:columnNamePascal}() {
+        return this.#{fields:columnName};
+    }
+    #{endfor}
+    #{endif}
+}
