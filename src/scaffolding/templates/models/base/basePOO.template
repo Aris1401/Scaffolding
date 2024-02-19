@@ -12,6 +12,13 @@ using #{imports};
 #{endif}
 #{endfor}
 
+#{if} framework:base
+import java.sql.Connection;
+import scaffolding.bdd.generic.GenericDAO;
+import scaffolding.database.ScaffoldDatabaseInfomations;
+import java.util.ArrayList;
+#{endif}
+
 #{if} language:dotnet
 namespace #{namespace};
 #{endif}
@@ -23,7 +30,7 @@ public class #{class_name} {
     #{endif}
 
     #{if} language:dotnet
-    public #{fields:columnType} #{fields:columnNamePascal} {set; get;}
+    public #{fields:languageType} #{fields:columnNamePascal} {set; get;}
     #{endif}
     #{endfor}
 
@@ -37,5 +44,79 @@ public class #{class_name} {
         return this.#{fields:columnName};
     }
     #{endfor}
+    #{endif}
+
+    #{if} framework:base
+    public void save#{class_name}() {
+        Connection c = ScaffoldDatabaseInfomations.getInstance().loadConnection();
+        try {
+            new GenericDAO<#{class_name}>(#{class_name}.class).saveInDatabse(c);
+            c.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<#{class_name}> getAll#{class_name}() {
+        Connection c = ScaffoldDatabaseInfomations.getInstance().loadConnection();
+
+        try {
+            ArrayList<#{class_name}> all#{class_name} = new GenericDAO<#{class_name}>(#{class_name}.class).getFromDatabase(c);
+            c.close();
+
+            return all#{class_name};
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public #{class_name} get#{class_name}ById(#{primary_key:languageType} #{primary_key:columnName}) {
+        Connection c = ScaffoldDatabaseInfomations.getInstance().loadConnection();
+
+        try {
+            ArrayList<#{class_name}> all#{class_name} = new GenericDAO<#{class_name}>(#{class_name}.class)
+                                                        .addToSelection("#{primary_key:columnName}", "#{primary_key:columnName}", "")
+                                                        .getFromDatabase(c);
+
+            c.close();
+
+            return all#{class_name}.isEmpty() ? null : all#{class_name}.get(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public #{class_name} update#{class_name}() {
+        Connection c = ScaffoldDatabaseInfomations.getInstance().loadConnection();
+
+        try {
+            new GenericDAO<#{class_name}>(#{class_name}.class)
+            .addToSelection("#{primary_key:columnName}", "#{primary_key:columnName}", "")
+            #{for} #{fields}
+            .addToSetUpdate("#{fields:columnName}", get#{fields:columnNamePascal}())
+            #{endfor}
+            .updateInDatabase(c);
+
+            c.close();
+
+            return this;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete#{class_name}() {
+            Connection c = ScaffoldDatabaseInfomations.getInstance().loadConnection();
+
+            try {
+                new GenericDAO<#{class_name}>(#{class_name}.class)
+                .addToSelection("#{primary_key:columnName}", "#{primary_key:columnName}", "")
+                .deleteFromDatabase(c);
+
+                c.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     #{endif}
 }

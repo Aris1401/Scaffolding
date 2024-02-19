@@ -30,6 +30,8 @@ public abstract class IScaffoldProcessTemplate {
     }
     Map<String, ArrayList<?>> mappedListVariables = new LinkedHashMap<>();
     Map<String, String> mappedStringVariables = new HashMap<>();
+    Map<String, Object> mappedObjectVariables = new HashMap<>();
+
     public boolean isListVariable(String variableName) {
         return mappedListVariables.containsKey(variableName);
     }
@@ -38,9 +40,20 @@ public abstract class IScaffoldProcessTemplate {
         return mappedStringVariables.containsKey(variableName);
     }
 
+    public boolean isObjectVariable(String variableName) {
+        return mappedObjectVariables.containsKey(variableName);
+    }
+
     public <T> T getVariable(String variableName) {
+        if (variableName.contains(CALL_SEPARATOR)) {
+            int call_separator_index = variableName.indexOf(CALL_SEPARATOR);
+            variableName = variableName.substring(0, call_separator_index);
+        }
+
         if (isListVariable(variableName)) return (T) mappedListVariables.get(variableName);
         if (isStringVariable(variableName)) return (T) mappedStringVariables.get(variableName);
+        if (isObjectVariable(variableName)) return (T) mappedObjectVariables.get(variableName);
+
         return null;
     }
 
@@ -53,6 +66,10 @@ public abstract class IScaffoldProcessTemplate {
 
     void storeStringVariable(String name, String value) {
         mappedStringVariables.put(name, value);
+    }
+
+    void storeObjectVariable(String name, Object value) {
+        mappedObjectVariables.put(name, value);
     }
 
     File getTemplateFileInPathFor(String language) {
@@ -174,8 +191,8 @@ public abstract class IScaffoldProcessTemplate {
             String[] variableCalls = getCallsInOneLine(processedLines.get(i));
 
             for (String variableCall : variableCalls) {
-                String variableValue = getVariable(variableCall);
-                String processedCall = processCall(variableCall, variableCall, getVariable(variableCall));
+                Object variableValue = getVariable(variableCall);
+                String processedCall = processCall(variableCall, variableCall, variableValue);
                 processedLines.set(i, processedLines.get(i).replace(VARIABLE_NOTATION_START + variableCall + VARIABLE_NOTATION_END, processedCall));
             }
         }
@@ -286,7 +303,7 @@ public abstract class IScaffoldProcessTemplate {
                 }
             }
             case UNKNOWN -> {
-                throw new RuntimeException("Variable encore indefini.");
+                return "";
             }
         }
 
