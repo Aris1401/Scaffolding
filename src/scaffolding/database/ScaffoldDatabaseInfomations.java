@@ -11,6 +11,20 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ScaffoldDatabaseInfomations {
+    // Singleton
+    private static ScaffoldDatabaseInfomations instance;
+    public static ScaffoldDatabaseInfomations getInstance(ScaffoldingArguments scaffoldingArguments) {
+        if (instance == null) {
+            instance = new ScaffoldDatabaseInfomations();
+            instance.setScaffoldingArguments(scaffoldingArguments);
+        }
+
+        return instance;
+    }
+
+    public static ScaffoldDatabaseInfomations getInstance() {
+        return instance;
+    }
     private ScaffoldingArguments scaffoldingArguments;
 
     public void setScaffoldingArguments(ScaffoldingArguments scaffoldingArguments) {
@@ -90,5 +104,30 @@ public class ScaffoldDatabaseInfomations {
         }
 
         return columnNameAndType;
+    }
+
+    public ScaffoldDatabaseTableInfo getTablePrimaryKey(String table) {
+        Connection c = loadConnection();
+
+        ScaffoldDatabaseTableInfo databaseTableInfo = new ScaffoldDatabaseTableInfo();
+
+        String columnNameAndTypeQuery = "SELECT column_name AS name, data_type AS type FROM information_schema.columns WHERE table_schema = 'public' AND table_name = ? AND column_name IN (SELECT column_name FROM information_schema.key_column_usage WHERE table_schema = 'public' AND table_name = ? AND constraint_name = (SELECT constraint_name FROM information_schema.table_constraints WHERE table_name = ? AND constraint_type = 'PRIMARY KEY'));";
+        try {
+            PreparedStatement statement = c.prepareStatement(columnNameAndTypeQuery);
+            statement.setString(1, table);
+            statement.setString(2, table);
+            statement.setString(3, table);
+
+            ResultSet columnNameAndTypeRes = statement.executeQuery();
+            while (columnNameAndTypeRes.next()) {
+                databaseTableInfo = new ScaffoldDatabaseTableInfo(columnNameAndTypeRes.getString("name"), columnNameAndTypeRes.getString("type"));
+            }
+
+            c.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return databaseTableInfo;
     }
 }

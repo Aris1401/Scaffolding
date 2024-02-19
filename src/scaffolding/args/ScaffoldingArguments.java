@@ -94,8 +94,16 @@ public class ScaffoldingArguments {
         this.framework = framework;
     }
 
-    public String getPackage() {
-        String namespace = outputDir;
+    public String getModelPackage() {
+        return getNamespaceFrom(outputDir);
+    }
+
+    public String getControllerPackage() {
+        return getNamespaceFrom(controller);
+    }
+
+    public String getNamespaceFrom(String path) {
+        String namespace = path;
         namespace = namespace.replace("./", "");
         namespace = namespace.replace("src/", "");
         namespace = namespace.replace("/", ".");

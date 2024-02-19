@@ -17,5 +17,10 @@ public class ScaffoldProcessModelTemplate extends IScaffoldProcessTemplate{
         storeListVariable("imports", imports);
         storeStringVariable("namespace", modelPackage);
         storeStringVariable("class_name", pascalCase(modelName));
+
+        // Obtenir primary key
+        ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);
+        primaryKey.language = language;
+        storeObjectVariable("primary_key", primaryKey);
     }
 }
