@@ -13,6 +13,9 @@ public class ScaffoldingArguments {
     String[] models;
     String controller;
     String framework;
+    String view;
+    String viewtype;
+    String viewoutputdir;
 
     public String getHost() {
         return host;
@@ -109,6 +112,30 @@ public class ScaffoldingArguments {
         namespace = namespace.replace("/", ".");
 
         return namespace;
+    }
+
+    public String getView(){
+        return this.view;
+    }
+
+    public void setView(String view){
+        this.view = view;
+    }
+
+    public String getViewtype(){
+        return this.viewtype;
+    }
+
+    public void setViewtype(){
+        this.viewtype = viewtype;
+    }
+
+    public String getViewoutputdir(){
+        return this.viewoutputdir;
+    }
+
+    public void setViewoutputdir(String viewoutputdir){
+        this.viewoutputdir = viewoutputdir;
     }
 
     @Override
