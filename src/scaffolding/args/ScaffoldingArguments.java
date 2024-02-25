@@ -14,7 +14,6 @@ public class ScaffoldingArguments {
     String controller;
     String framework;
     String view;
-    String viewtype;
     String viewoutputdir;
 
     public String getHost() {
@@ -122,14 +121,6 @@ public class ScaffoldingArguments {
         this.view = view;
     }
 
-    public String getViewtype(){
-        return this.viewtype;
-    }
-
-    public void setViewtype(){
-        this.viewtype = viewtype;
-    }
-
     public String getViewoutputdir(){
         return this.viewoutputdir;
     }
@@ -150,6 +141,8 @@ public class ScaffoldingArguments {
                 ", language='" + language + '\'' +
                 ", models=" + Arrays.toString(models) +
                 ", controller='" + controller + '\'' +
+                ", view= '" + view + '\'' +
+                ", viewoutputdir'" + viewoutputdir + '\'' +
                 '}';
     }
 }

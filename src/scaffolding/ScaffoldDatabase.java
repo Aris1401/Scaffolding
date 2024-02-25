@@ -50,6 +50,13 @@ public class ScaffoldDatabase {
                 String controllerName = fileName + "Controller";
                 ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getController(), scaffoldingArguments.getLanguage(), controllerName, controllerCodeLines);
             }
+
+            // Creation de view
+            if(scaffoldingArguments.getView() != null) {
+                System.out.println("Creation views...");
+
+                
+            }
         }
     }
 }

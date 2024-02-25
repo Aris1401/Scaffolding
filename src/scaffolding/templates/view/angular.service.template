@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class #{service_class_name} {
+
+  constructor(private http: HttpClient) { }
+
+  getData(): Observable<any[]> {
+    // Implement logic to fetch data from API or any other source
+  }
+
+  updateData(data: any): Observable<any> {
+    // Implement logic to update data
+  }
+
+  deleteData(id: any): Observable<any> {
+    // Implement logic to delete data
+  }
+
+}

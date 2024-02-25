@@ -1,0 +1,46 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { #{service_class_name} } from '#{service_path}';
+
+@Component({
+  selector: '#{component_selector}',
+  templateUrl: './#{component_name}.component.html',
+  styleUrls: ['./#{component_name}.component.css']
+})
+export class #{component_class_name} implements OnInit {
+
+  data: any[] = [];
+  form: FormGroup;
+
+  constructor(private #{service_variable_name}: #{service_class_name}, private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.loadData();
+  }
+
+  initializeForm(): void {
+    this.form = this.fb.group({
+      // Define form controls here
+    });
+  }
+
+  loadData(): void {
+    this.#{service_variable_name}.getData().subscribe((result: any[]) => {
+      this.data = result;
+    });
+  }
+
+  onSubmit(): void {
+    // Handle form submission
+  }
+
+  editItem(index: number): void {
+    // Handle editing of item at given index
+  }
+
+  deleteItem(index: number): void {
+    // Handle deletion of item at given index
+  }
+
+}
