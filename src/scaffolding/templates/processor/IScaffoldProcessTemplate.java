@@ -325,7 +325,11 @@ public abstract class IScaffoldProcessTemplate {
                 throw new RuntimeException(e);
             }
         } else {
-            return invokedObject.toString();
+            try {
+                return invokedObject.toString();
+            } catch (NullPointerException e) {
+                throw new RuntimeException("Call: " + call + " impossible.");
+            }
         }
     }
 
@@ -342,5 +346,25 @@ public abstract class IScaffoldProcessTemplate {
 
     public static String pascalCase(String string) {
         return  string.substring(0, 1).toUpperCase() + string.substring(1, string.length());
+    }
+
+    public static String camelCase(String string) {
+        return  string.substring(0, 1).toLowerCase() + string.substring(1, string.length());
+    }
+
+    public static String processModelName(String input) {
+        StringBuilder sb = new StringBuilder();
+        String[] parts = input.split("_");
+
+        for (int i = 0; i < parts.length; i++) {
+            if (i == 0) {
+                sb.append(parts[i]); // Append the first word as it is
+            } else {
+                // Capitalize the first letter of subsequent words
+                sb.append(Character.toUpperCase(parts[i].charAt(0)))
+                        .append(parts[i].substring(1));
+            }
+        }
+        return sb.toString();
     }
 }

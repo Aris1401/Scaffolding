@@ -24,7 +24,7 @@ public class ScaffoldDatabaseTableInfo {
     }
 
     public String getColumnName() {
-        return columnName;
+        return IScaffoldProcessTemplate.processModelName(columnName);
     }
 
     public void setColumnName(String columnName) {
@@ -46,7 +46,7 @@ public class ScaffoldDatabaseTableInfo {
         // Obtenir les configuration
         Properties columnTypesProperties = ScaffoldLoader.getColumnTypesProperties();
 
-        String currentColumnType = columnTypesProperties.getProperty(COLUMN_TYPE_CONFIG_PROPERTIES + getColumnType() + "." + language);
+        String currentColumnType = columnTypesProperties.getProperty(COLUMN_TYPE_CONFIG_PROPERTIES + getColumnType().replace(" ", "") + "." + language);
         return currentColumnType == null ? getColumnType() : currentColumnType;
     }
     // Getting the imports needed

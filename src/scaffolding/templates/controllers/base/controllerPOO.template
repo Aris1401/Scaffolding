@@ -6,6 +6,7 @@ package #{package};
 #{if} language:java
 import #{imports};
 #{endif}
+import java.util.List;
 
 #{if} language:dotnet
 using #{imports};
@@ -17,6 +18,34 @@ using #{imports};
 namespace #{package};
 #{endif}
 
+@RestController
+@RequestMapping("/api/v1/#{class_name_lower}s")
 public class #{class_name}Controller {
+    @Autowired
+    private #{class_name}Service #{class_name_camel}Service;
 
+    @GetMapping("")
+    public List<#{class_name}> getAll#{class_name}() {
+        return #{class_name_camel}Service.getAll#{class_name}();
+    }
+
+    @GetMapping("/{id}")
+    public List<#{class_name}> get#{class_name}ById(@PathVariable int id) {
+        return #{class_name_camel}Service.get#{class_name}ById(id);
+    }
+
+    @PostMapping("")
+    public #{class_name} save#{class_name}(@RequestBody #{class_name} #{class_name_camel}) {
+        return #{class_name_camel}Service.save#{class_name}(#{class_name_camel});
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete#{class_name}ById(@PathVariable int id) {
+        #{class_name_camel}Service.delete#{class_name}ById(id);
+    }
+
+    @PutMapping("/{id}")
+    public #{class_name} update#{class_name}(@PathVariable int id, @RequestBody #{class_name} #{class_name_camel}) {
+        return #{class_name_camel}Service.update#{class_name}ById(id);
+    }
 }

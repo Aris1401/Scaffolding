@@ -1,26 +1,24 @@
 package scaffolding.templates.processor;
 
-import scaffolding.database.ScaffoldDatabaseTableInfo;
-
 import java.util.ArrayList;
 
-public class ScaffoldProcessControllerTemplate extends IScaffoldProcessTemplate {
-    public static final String CONTROLLER_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.controller.path.";
+public class ScaffoldProcessServiceTemplate extends IScaffoldProcessTemplate{
+    public static final String CONTROLLER_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.services.path.";
 
-    public ScaffoldProcessControllerTemplate(String modelName, String controllerPackage, String modelPackage, String servicePackage) {
+    public ScaffoldProcessServiceTemplate(String modelName, String servicePackage, String modelPackage, String repositoryPackage) {
         currentTemplatePath = CONTROLLER_TEMPLATE_PATH_CONFIG_PREFIX;
 
         ArrayList<String> imports = new ArrayList<>();
         imports.add(modelPackage + "." + pascalCase(processModelName(modelName)));
-        imports.add(servicePackage + "." + pascalCase(processModelName(modelName)) + "Service");
+        imports.add(repositoryPackage + "." + pascalCase(processModelName(modelName)) + "Repository");
 
         // Storing the variable
         storeStringVariable("class_name", pascalCase(processModelName(modelName)));
-        storeStringVariable("package", controllerPackage);
+        storeStringVariable("package", servicePackage);
 
         storeListVariable("imports", imports);
 
-
+        // Spring boot
         // Spring boot
         storeStringVariable("class_name_camel", camelCase(processModelName(modelName)));
         storeStringVariable("modeles_path", modelPackage);
