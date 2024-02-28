@@ -25,7 +25,7 @@ namespace #{namespace};
 
 #{if} framework:springboot
 @Entity
-#{endfor}
+#{endif}
 public class #{class_name} {
     #{for} #{fields}
     #{if} language:java
