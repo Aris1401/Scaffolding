@@ -130,4 +130,19 @@ public class ScaffoldDatabaseInfomations {
 
         return databaseTableInfo;
     }
+    public static ScaffoldDatabaseTableInfo getTableForeignKeys(String tableName) throws SQLException {
+        Connection connection = loadConnection();
+        ScaffoldDatabaseTableInfo databaseTableInfo = new ScaffoldDatabaseTableInfo();
+        DatabaseMetaData metaData = connection.getMetaData();
+        ResultSet resultSet = metaData.getExportedKeys(null, null, tableName);
+
+        while (resultSet.next()) {
+            String fkTableName = resultSet.getString("FKTABLE_NAME");
+            // String fkColumnName = resultSet.getString("FKCOLUMN_NAME");
+            // String type = resultSet.getString("TYPE_NAME");
+            databaseTableInfo = new ScaffoldDatabaseTableInfo(resultSet.getString("FKCOLUMN_NAME"), columnNameAndTypeRes.getString("TYPE_NAME"));
+        }
+
+        return databaseTableInfo;
+    }
 }
