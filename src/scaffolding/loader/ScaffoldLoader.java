@@ -50,4 +50,8 @@ public class ScaffoldLoader {
     public static Properties getColumnTypesProperties() {
         return getConfiguationProperties("scaffoldColumnTypes");
     }
+
+    public static Properties getFrameworkGeneratorProperties() {
+        return getConfiguationProperties("scaffoldFrameworkGenerator");
+    }
 }

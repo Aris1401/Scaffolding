@@ -23,6 +23,9 @@ import java.util.ArrayList;
 namespace #{namespace};
 #{endif}
 
+#{if} framework:springboot
+@Entity
+#{endif}
 public class #{class_name} {
     #{for} #{fields}
     #{if} language:java
