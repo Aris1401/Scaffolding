@@ -1,4 +1,4 @@
-export class #{class_name} {
+export class #{class_name_camel} {
     #{for} #{fields}
     #{fields:columnName}: #{fields:languageType}
     #{endfor} 

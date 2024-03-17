@@ -54,8 +54,8 @@ public class ScaffoldDatabase {
             // Creation de view
             if(scaffoldingArguments.getView() != null) {
                 System.out.println("Creation views...");
-
                 
+                                
             }
         }
     }
