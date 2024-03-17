@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { #{class_name} } from './#{class_name}.model';
+
+const baseUrl = 'http://localhost:8080/api/#{class_name}'; // Remplacer par votre URL d'API
 
 @Injectable({
   providedIn: 'root'
 })
-export class #{service_class_name} {
+export class #{class_name}Service {
 
   constructor(private http: HttpClient) { }
 
-  getData(): Observable<any[]> {
-    // Implement logic to fetch data from API or any other source
+  get#{class_name}s(): Observable<#{class_name}[]> {
+    return this.http.get<#{class_name}[]>(baseUrl);
   }
 
-  updateData(data: any): Observable<any> {
-    // Implement logic to update data
+  create#{class_name}(#{class_name}: #{class_name}): Observable<#{class_name}> {
+    return this.http.post<#{class_name}>(baseUrl, #{class_name});
   }
 
-  deleteData(id: any): Observable<any> {
-    // Implement logic to delete data
+  update#{class_name}(#{primary_key:columnName}: number, #{class_name}: #{class_name}): Observable<#{class_name}> {
+    return this.http.put<#{class_name}>(`${baseUrl}/${#{primary_key:columnName}}`, #{class_name});
   }
 
+   update#{class_name}(#{primary_key:columnName}: number): Observable<void> {
+    return this.http.delete<void>(`${baseUrl}/${#{primary_key:columnName}}`);
+  }
 }

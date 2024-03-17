@@ -1,46 +1,69 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { #{service_class_name} } from '#{service_path}';
+import { PersonneService } from './personne.service';
+import { #{class_name} } from './#{class_name}.model';
 
 @Component({
-  selector: '#{component_selector}',
-  templateUrl: './#{component_name}.component.html',
-  styleUrls: ['./#{component_name}.component.css']
+  selector: 'app-#{class_name}',
+  templateUrl: './#{class_name}.component.html',
+  styleUrls: ['./#{class_name}.component.css']
 })
-export class #{component_class_name} implements OnInit {
+export class #{class_name}Component implements OnInit {
 
-  data: any[] = [];
-  form: FormGroup;
+  #{class_name}s: #{class_name}[] = [];
+  new#{class_name}: #{class_name} = new #{class_name}();
+  edited#{class_name}: #{class_name} = new #{class_name}();
+  isCreateModalOpen = false;
+  isEditModalOpen = false;
 
-  constructor(private #{service_variable_name}: #{service_class_name}, private fb: FormBuilder) { }
+  constructor(private #{class_name}Service: #{class_name}Service) { }
 
   ngOnInit(): void {
-    this.initializeForm();
-    this.loadData();
+    this.get#{class_name}s();
   }
 
-  initializeForm(): void {
-    this.form = this.fb.group({
-      // Define form controls here
+  get#{class_name}s(): void {
+    this.#{class_name}Service.get#{class_name}s().subscribe(#{class_name}s => this.#{class_name}s = #{class_name}s);
+  }
+
+  onCreate(): void {
+    this.isCreateModalOpen = true;
+  }
+
+  onSubmitCreate(): void {
+    this.#{class_name}Service.create#{class_name}(this.new#{class_name}).subscribe(() => {
+      this.get#{class_name}s();
+      this.onCloseCreateModal();
     });
   }
 
-  loadData(): void {
-    this.#{service_variable_name}.getData().subscribe((result: any[]) => {
-      this.data = result;
+  onCloseCreateModal(): void {
+    this.isCreateModalOpen = false;
+    this.new#{class_name} = new #{class_name}();
+  }
+
+  onEdit(#{class_name}: #{class_name}): void {
+    this.edited#{class_name} = #{class_name};
+    this.isEditModalOpen = true;
+  }
+
+  onSubmitEdit(): void {
+    this.#{class_name}Service.update#{class_name}(this.edited#{class_name}.#{primary_key:columnName}, this.edited#{class_name}).subscribe(() => {
+      this.get#{class_name}();
+      this.onCloseEditModal();
     });
   }
 
-  onSubmit(): void {
-    // Handle form submission
+  onCloseEditModal(): void {
+    this.isEditModalOpen = false;
+    this.edited#{class_name} = new #{class_name}();
   }
 
-  editItem(index: number): void {
-    // Handle editing of item at given index
+  onDelete(#{class_name}: #{class_name}): void {
+    if (confirm("Êtes-vous sûr de vouloir supprimer #{class_name} ?")) {
+      this.#{class_name}Service.delete#{class_name}(#{class_name}.id).subscribe(() => {
+        this.get#{class_name}s();
+      });
+    }
   }
-
-  deleteItem(index: number): void {
-    // Handle deletion of item at given index
-  }
-
 }
+  

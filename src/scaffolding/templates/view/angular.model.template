@@ -1,0 +1,5 @@
+export class #{class_name} {
+    #{for} #{fields}
+    #{fields:columnName}: #{fields:languageType}
+    #{endfor} 
+}
