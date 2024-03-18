@@ -75,6 +75,30 @@ public class ScaffoldGenerateCode {
         return true;
     }
 
+    public static boolean generateCodeInPathWithExtension(String path, String extension, String fileName, ArrayList<String> codeLines) {
+        // Getting the directory
+        File directoryPath = getDirectory(path, true);
+
+        // Getting the file
+        String filePath = directoryPath.getAbsolutePath() + "/" + fileName + extension;
+        File file = getFile(filePath, true);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            for (String codeLine : codeLines) {
+                writer.write(codeLine);
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
     static File getDirectory(String dirPath, boolean create) {
         File dirFile = new File(dirPath);
         if (create)
