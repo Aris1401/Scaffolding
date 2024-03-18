@@ -1,0 +1,17 @@
+#{if} language:java
+package #{package};
+#{endif}
+
+#{for} #{imports}
+#{if} language:java
+import #{imports};
+#{endif}
+#{endfor}
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface #{class_name}Repository extends JpaRepository<#{class_name}, Long> {
+
+}
