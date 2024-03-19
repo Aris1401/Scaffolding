@@ -46,11 +46,12 @@ public class ScaffoldDatabase {
 
             String[] models = scaffoldDatabaseInfomations.getDatabaseTableNames();
             for (String model : models) {
+                if (model.toLowerCase().startsWith("v_")) continue;
                 // Creation de view
                 ArrayList<ScaffoldDatabaseTableInfo> fields = scaffoldDatabaseInfomations.getColumns(model);
                 if(scaffoldingArguments.getView() != null && !scaffoldingArguments.getViewoutputdir().isEmpty()) {
                     if(scaffoldingArguments.getView().compareTo("angular")==0){
-                        System.out.println("Creation views...");
+                        System.out.println(model.toUpperCase() + ": Creation views...");
                         ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewComponentName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewComponentName, viewComponentCodeLines);

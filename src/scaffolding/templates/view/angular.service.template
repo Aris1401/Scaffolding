@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { #{class_name_camel} } from './#{class_name_lower}.model';
 
-const baseUrl = 'http://localhost:8080/api/#{class_name_lower}s'; // Remplacer par votre URL d'API
+const baseUrl = 'http://localhost:8080/v1/api/#{class_name_lower}s'; // Remplacer par votre URL d'API
 
 @Injectable({
   providedIn: 'root'

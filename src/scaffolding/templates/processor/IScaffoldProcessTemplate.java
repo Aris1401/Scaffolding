@@ -57,6 +57,18 @@ public abstract class IScaffoldProcessTemplate {
         return null;
     }
 
+    public <T> T getNonListVariable(String variableName) {
+        if (variableName.contains(CALL_SEPARATOR)) {
+            int call_separator_index = variableName.indexOf(CALL_SEPARATOR);
+            variableName = variableName.substring(0, call_separator_index);
+        }
+
+        if (isStringVariable(variableName)) return (T) mappedStringVariables.get(variableName);
+        if (isObjectVariable(variableName)) return (T) mappedObjectVariables.get(variableName);
+
+        return null;
+    }
+
     // Buffering purposes
     ArrayList<String> buffuredLines = new ArrayList<>();
 
@@ -293,7 +305,12 @@ public abstract class IScaffoldProcessTemplate {
                         // Obtenir les variables sur une ligne
                         String[] calls = getCallsInOneLine(buffuredLines.get(i));
                         for (String call : calls) {
-                            String callProcessed = processCall(call, variableName, info);
+                            String callProcessed = "";
+
+                            Object variableValue = getNonListVariable(call);
+                            if (variableValue != null) callProcessed = processCall(call, call, variableValue);
+                            else callProcessed = processCall(call, variableName, info);
+
                             line = line.replace(VARIABLE_NOTATION_START + call + VARIABLE_NOTATION_END, callProcessed);
                         }
 
@@ -322,7 +339,7 @@ public abstract class IScaffoldProcessTemplate {
                 invokedMethod.setAccessible(true);
                 return invokedMethod.invoke(invokedObject).toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Failed on call: " + call + " | Variable name: " + variableName);
             }
         } else {
             try {

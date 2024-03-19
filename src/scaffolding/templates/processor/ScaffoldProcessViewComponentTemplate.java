@@ -16,6 +16,7 @@ public class ScaffoldProcessViewComponentTemplate extends IScaffoldProcessTempla
         // Obtenir primary key
         ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);
         primaryKey.language = language;
+
         storeObjectVariable("primary_key", primaryKey);
     }
 }
