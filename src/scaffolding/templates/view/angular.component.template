@@ -1,0 +1,69 @@
+import { Component, OnInit } from '@angular/core';
+import { PersonneService } from './personne.service';
+import { #{class_name} } from './#{class_name}.model';
+
+@Component({
+  selector: 'app-#{class_name_lower}',
+  templateUrl: './#{class_name_lower}.component.html',
+  styleUrls: ['./#{class_name_lower}.component.css']
+})
+export class #{class_name_camel}Component implements OnInit {
+
+  #{class_name_lower}s: #{class_name_camel}[] = [];
+  new#{class_name_camel}: #{class_name_camel} = new #{class_name_camel}();
+  edited#{class_name_camel}: #{class_name_camel} = new #{class_name_camel}();
+  isCreateModalOpen = false;
+  isEditModalOpen = false;
+
+  constructor(private #{class_name_lower}Service: #{class_name_camel}Service) { }
+
+  ngOnInit(): void {
+    this.get#{class_name_camel}s();
+  }
+
+  get#{class_name_camel}s(): void {
+    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe(#{class_name_lower}s => this.#{class_name_lower}s = #{class_name_lower}s);
+  }
+
+  onCreate(): void {
+    this.isCreateModalOpen = true;
+  }
+
+  onSubmitCreate(): void {
+    this.#{class_name_lower}Service.create#{class_name_camel}(this.new#{class_name_camel}).subscribe(() => {
+      this.get#{class_name_camel}s();
+      this.onCloseCreateModal();
+    });
+  }
+
+  onCloseCreateModal(): void {
+    this.isCreateModalOpen = false;
+    this.new#{class_name_camel} = new #{class_name_camel}();
+  }
+
+  onEdit(#{class_name_lower}: #{class_name_camel}): void {
+    this.edited#{class_name_camel} = #{class_name_lower};
+    this.isEditModalOpen = true;
+  }
+
+  onSubmitEdit(): void {
+    this.#{class_name_lower}Service.update#{class_name_camel}(this.edited#{class_name_camel}.#{primary_key:columnName}, this.edited#{class_name_camel}).subscribe(() => {
+      this.get#{class_name_camel}s();
+      this.onCloseEditModal();
+    });
+  }
+
+  onCloseEditModal(): void {
+    this.isEditModalOpen = false;
+    this.edited#{class_name_camel} = new #{class_name_camel}();
+  }
+
+  onDelete(#{class_name_lower}: #{class_name_camel}): void {
+    if (confirm("Êtes-vous sûr de vouloir supprimer #{class_name_lower} ?")) {
+      this.#{class_name_lower}Service.delete#{class_name_camel}(#{class_name_lower}.#{primary_key:columnName}).subscribe(() => {
+        this.get#{class_name_camel}s();
+      });
+    }
+  }
+}
+  

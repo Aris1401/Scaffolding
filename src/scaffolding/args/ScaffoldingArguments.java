@@ -13,6 +13,8 @@ public class ScaffoldingArguments {
     String[] models;
     String controller;
     String framework;
+    String view;
+    String viewoutputdir;
 
     public String getHost() {
         return host;
@@ -111,6 +113,22 @@ public class ScaffoldingArguments {
         return namespace;
     }
 
+    public String getView(){
+        return this.view;
+    }
+
+    public void setView(String view){
+        this.view = view;
+    }
+
+    public String getViewoutputdir(){
+        return this.viewoutputdir;
+    }
+
+    public void setViewoutputdir(String viewoutputdir){
+        this.viewoutputdir = viewoutputdir;
+    }
+
     @Override
     public String toString() {
         return "ScaffoldingArguments{" +
@@ -123,6 +141,8 @@ public class ScaffoldingArguments {
                 ", language='" + language + '\'' +
                 ", models=" + Arrays.toString(models) +
                 ", controller='" + controller + '\'' +
+                ", view= '" + view + '\'' +
+                ", viewoutputdir'" + viewoutputdir + '\'' +
                 '}';
     }
 }

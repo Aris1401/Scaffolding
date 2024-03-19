@@ -1,0 +1,56 @@
+<h1>Gestion des #{class_name_lower}s</h1>
+
+<button (click)="onCreate()">Ajout de #{class_name_lower}</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      #{for} #{fields}
+      <th>#{fields:columnNamePascal}</th>
+      #{endfor}
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let #{class_name_lower} of #{class_name_lower}s">
+      #{for} #{fields}
+      <td>{{ #{class_name_lower}.#{fields:columnName} }}</td>
+      #{endfor}
+      <td>
+        <button (click)="onEdit(#{class_name_lower})">Modifier</button>
+        <button (click)="onDelete(#{class_name_lower})">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isCreateModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Ajouter #{class_name_lower}</h2>
+      <button (click)="onCloseCreateModal()">X</button>
+    </header>
+    <form (submit)="onSubmitCreate()">
+      #{for} #{fields}
+      <label for="#{fields:columnName}">#{fields:columnNamePascal}:</label>
+      <input type="text" id="#{fields:columnName}" [(ngModel)]="new#{class_name_camel}.#{fields:columnName}" required>
+      #{endfor}
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Modifier #{class_name_lower}</h2>
+      <button (click)="onCloseEditModal()">X</button>
+    </header>
+    <form (submit)="onSubmitEdit()">
+      #{for} #{fields}
+      <label for="#{fields:columnName}">#{fields:columnNamePascal}:</label>
+      <input type="text" id="#{fields:columnName}" [(ngModel)]="edited#{class_name_camel}.#{fields:columnName}" required>
+      #{endfor}
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
+</div>
