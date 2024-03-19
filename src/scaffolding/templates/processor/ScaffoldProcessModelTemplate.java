@@ -8,11 +8,12 @@ import java.util.ArrayList;
 public class ScaffoldProcessModelTemplate extends IScaffoldProcessTemplate{
     public static final String MODEL_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.model.path.";
 
-    public ScaffoldProcessModelTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields, String modelName, String modelPackage, String language) {
+    public ScaffoldProcessModelTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields, ArrayList<ScaffoldDatabaseTableInfo> foreignKeys, String modelName, String modelPackage, String language) {
         currentTemplatePath = MODEL_TEMPLATE_PATH_CONFIG_PREFIX;
 
         // Storing the variables
         storeListVariable("fields", fields);
+        storeListVariable("foreign_keys", foreignKeys);
         ArrayList<String> imports = ScaffoldDatabaseTableInfo.neededImportsForLanguage(language, fields);
         storeListVariable("imports", imports);
         storeStringVariable("namespace", modelPackage);

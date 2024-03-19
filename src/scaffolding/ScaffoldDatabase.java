@@ -9,10 +9,11 @@ import scaffolding.templates.processor.ScaffoldProcessViewComponentTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewCssTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewHTMLTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewModelTemplate;
-import scaffolding.templates.processor.ScaffoldViewServiceTemplate;
+import scaffolding.templates.processor.ScaffoldProcessViewServiceTemplate;
 import scaffolding.generator.framework.BaseFrameworkGenerator;
 import scaffolding.generator.framework.IFrameworkGenerator;
 import scaffolding.loader.ScaffoldLoader;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -54,7 +55,7 @@ public class ScaffoldDatabase {
                         String viewComponentName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewComponentName, viewComponentCodeLines);
                         System.out.println("Component create successfully...");
-                        
+
                         ArrayList<String> viewCssCodeLines = new ScaffoldProcessViewCssTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewCssName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".css", viewCssName, viewCssCodeLines);
@@ -69,7 +70,7 @@ public class ScaffoldDatabase {
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewModelName, viewModelCodeLines);
                         System.out.println("Model create successfully...");
 
-                        ArrayList<String> viewServiceCodeLines = new ScaffoldViewServiceTemplate(model,"").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        ArrayList<String> viewServiceCodeLines = new ScaffoldProcessViewServiceTemplate(model,"").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewServiceName = model + ".service";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewServiceName, viewServiceCodeLines);
                         System.out.println("Service create successfully...");

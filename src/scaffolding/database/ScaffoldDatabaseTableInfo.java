@@ -12,6 +12,8 @@ public class ScaffoldDatabaseTableInfo {
 
     String columnName;
     String columnType;
+    public boolean isForeignKey = false;
+    String foreignKeyTo;
     public String language;
 
     public ScaffoldDatabaseTableInfo() {
@@ -26,7 +28,9 @@ public class ScaffoldDatabaseTableInfo {
     public String getColumnName() {
         return IScaffoldProcessTemplate.processModelName(columnName);
     }
-
+    public String getRawColumnName() {
+        return columnName;
+    }
     public void setColumnName(String columnName) {
         this.columnName = columnName;
     }
@@ -34,6 +38,8 @@ public class ScaffoldDatabaseTableInfo {
     public String getColumnType() {
         return columnType;
     }
+    public String getColumnTypePascal() {return IScaffoldProcessTemplate.pascalCase(IScaffoldProcessTemplate.processModelName(getColumnType()));}
+    public String getColumnTypeProcessed() {return (IScaffoldProcessTemplate.processModelName(getColumnType()));}
 
     public void setColumnType(String columnType) {
         this.columnType = columnType;
@@ -57,7 +63,7 @@ public class ScaffoldDatabaseTableInfo {
         // Obtenir les configuration
         Properties columnTypesProperties = ScaffoldLoader.getColumnTypesProperties();
         for (ScaffoldDatabaseTableInfo databaseTableInfo : tableInfos) {
-            String imported = columnTypesProperties.getProperty(IMPORTS_CONFIG_PROPERTIES + databaseTableInfo.getColumnType().toLowerCase() + "." + language);
+            String imported = columnTypesProperties.getProperty(IMPORTS_CONFIG_PROPERTIES + databaseTableInfo.getColumnType().toLowerCase().replace(" ", "") + "." + language);
             if (imported != null) imports.add(imported);
         }
 
@@ -68,5 +74,14 @@ public class ScaffoldDatabaseTableInfo {
         for (ScaffoldDatabaseTableInfo info : infos) {
             info.language = language;
         }
+    }
+
+    public void setIsForeignKey(String foreignKeyTo) {
+        isForeignKey = true;
+        this.foreignKeyTo = foreignKeyTo;
+    }
+
+    public String getForeignKeyTo() {
+        return IScaffoldProcessTemplate.processModelName(foreignKeyTo);
     }
 }

@@ -25,7 +25,7 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
                     .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String repositoryName = fileName + "Repository";
-            ScaffoldGenerateCode.generateCodeInPath("./src/" + repositoryPackage, scaffoldingArguments.getLanguage(), repositoryName, repositoryCodeLines);
+            ScaffoldGenerateCode.generateCodeInPath("./src/res/" + repositoryPackage, scaffoldingArguments.getLanguage(), repositoryName, repositoryCodeLines);
 
             // Generation de service
             String servicesPackage = "services";
@@ -33,7 +33,7 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
                     .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String serviceName = fileName + "Service";
-            ScaffoldGenerateCode.generateCodeInPath("./src/" + servicesPackage, scaffoldingArguments.getLanguage(), serviceName, serviceCodeLines);
+            ScaffoldGenerateCode.generateCodeInPath("./src/res/" + servicesPackage, scaffoldingArguments.getLanguage(), serviceName, serviceCodeLines);
             // Generation controller
 
             // Creation de controller

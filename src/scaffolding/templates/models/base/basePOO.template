@@ -37,6 +37,14 @@ public class #{class_name} {
     #{endif}
     #{endfor}
 
+    #{if} framework:springboot
+    #{for} #{foreign_keys}
+    @ManyToOne
+    @JoinColumn("#{foreign_keys:rawColumnName}")
+    #{foreign_keys:columnTypePascal} #{foreign_keys:columnTypeProcessed};
+    #{endfor}
+    #{endif}
+
     #{if} language:java
     #{for} #{fields}
     public void set#{fields:columnNamePascal}(#{fields:languageType} #{fields:columnName}) {

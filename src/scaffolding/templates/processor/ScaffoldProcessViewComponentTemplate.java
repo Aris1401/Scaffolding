@@ -11,6 +11,7 @@ public class ScaffoldProcessViewComponentTemplate extends IScaffoldProcessTempla
 
         storeStringVariable("class_name_camel", pascalCase(modelName));
         storeStringVariable("class_name_lower", modelName);
+        storeStringVariable("class_name", pascalCase(modelName));
 
         // Obtenir primary key
         ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);
