@@ -1,5 +1,5 @@
 export class #{class_name_camel} {
     #{for} #{fields}
-    #{fields:columnName}: #{fields:languageType}
+    #{fields:columnName}: string = ""
     #{endfor} 
 }

@@ -49,6 +49,7 @@ public class ScaffoldDatabase {
                 if (model.toLowerCase().startsWith("v_")) continue;
                 // Creation de view
                 ArrayList<ScaffoldDatabaseTableInfo> fields = scaffoldDatabaseInfomations.getColumns(model);
+                ScaffoldDatabaseTableInfo.addLanguagesFor("ts", fields);
                 if(scaffoldingArguments.getView() != null && !scaffoldingArguments.getViewoutputdir().isEmpty()) {
                     if(scaffoldingArguments.getView().compareTo("angular")==0){
                         System.out.println(model.toUpperCase() + ": Creation views...");

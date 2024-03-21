@@ -20,20 +20,20 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
 
         if (scaffoldingArguments.getController() != null && !scaffoldingArguments.getController().isEmpty()) {
             // Generation de repository
-            String repositoryPackage = "repositories";
+            String repositoryPackage = "com.scaffolding.test.repositories";
             ArrayList<String> repositoryCodeLines = new ScaffoldProcessRepositoryTemplate(model, repositoryPackage, scaffoldingArguments.getModelPackage())
                     .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String repositoryName = fileName + "Repository";
-            ScaffoldGenerateCode.generateCodeInPath("./src/res/" + repositoryPackage, scaffoldingArguments.getLanguage(), repositoryName, repositoryCodeLines);
+            ScaffoldGenerateCode.generateCodeInPath("./src/com/scaffolding/test/" + repositoryPackage, scaffoldingArguments.getLanguage(), repositoryName, repositoryCodeLines);
 
             // Generation de service
-            String servicesPackage = "services";
+            String servicesPackage = "com.scaffoling.test.services";
             ArrayList<String> serviceCodeLines = new ScaffoldProcessServiceTemplate(model, servicesPackage, scaffoldingArguments.getModelPackage(), repositoryPackage)
                     .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String serviceName = fileName + "Service";
-            ScaffoldGenerateCode.generateCodeInPath("./src/res/" + servicesPackage, scaffoldingArguments.getLanguage(), serviceName, serviceCodeLines);
+            ScaffoldGenerateCode.generateCodeInPath("./src/com/scaffolding/test/" + servicesPackage, scaffoldingArguments.getLanguage(), serviceName, serviceCodeLines);
             // Generation controller
 
             // Creation de controller

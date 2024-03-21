@@ -21,10 +21,10 @@ public class #{class_name}Service {
         return #{class_name_camel}Repository.findAll();
     }
 
-    public List<#{class_name}> get#{class_name}ById(int id) {
+    public #{class_name} get#{class_name}ById(int id) {
         // Implement your logic to retrieve #{class_name} by id
         // This is just a placeholder, you should implement according to your requirements
-        return #{class_name_camel}Repository.findById(id);
+        return #{class_name_camel}Repository.findById(id).get();
     }
 
     public #{class_name} save#{class_name}(#{class_name} #{class_name_camel}) {

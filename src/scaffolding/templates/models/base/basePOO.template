@@ -19,6 +19,10 @@ import scaffolding.database.ScaffoldDatabaseInfomations;
 import java.util.ArrayList;
 #{endif}
 
+#{if} framework:springboot
+import jakarta.persistence.*;
+#{endif}
+
 #{if} language:dotnet
 namespace #{namespace};
 #{endif}
@@ -27,6 +31,13 @@ namespace #{namespace};
 @Entity
 #{endif}
 public class #{class_name} {
+    #{if} isset:primary_key
+    #{innerif} framework:springboot
+    @Id
+    #{innerendif}
+    #{primary_key:languageType} #{primary_key:columnName};
+    #{endif}
+
     #{for} #{fields}
     #{if} language:java
     #{field:languageType} #{fields:columnName};
@@ -40,7 +51,7 @@ public class #{class_name} {
     #{if} framework:springboot
     #{for} #{foreign_keys}
     @ManyToOne
-    @JoinColumn("#{foreign_keys:rawColumnName}")
+    @JoinColumn(name = "#{foreign_keys:rawColumnName}")
     #{foreign_keys:columnTypePascal} #{foreign_keys:columnTypeProcessed};
     #{endfor}
     #{endif}

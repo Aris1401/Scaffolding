@@ -5,15 +5,15 @@
 <table class="table">
   <thead>
     <tr>
-      #{for} #{fields}
-      <th>#{fields:columnNamePascal}</th>
+      #{for} #{a_fields}
+      <th>#{a_fields:columnNamePascal}</th>
       #{endfor}
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let #{class_name_lower} of #{class_name_lower}s">
-      #{for} #{fields}
-      <td>{{ #{class_name_lower}.#{fields:columnName} }}</td>
+      #{for} #{a_fields}
+      <td>{{ #{class_name_lower}.#{a_fields:columnName} }}</td>
       #{endfor}
       <td>
         <button (click)="onEdit(#{class_name_lower})">Modifier</button>
@@ -30,9 +30,9 @@
       <button (click)="onCloseCreateModal()">X</button>
     </header>
     <form (submit)="onSubmitCreate()">
-      #{for} #{fields}
-      <label for="#{fields:columnName}">#{fields:columnNamePascal}:</label>
-      <input type="text" id="#{fields:columnName}" [(ngModel)]="new#{class_name_camel}.#{fields:columnName}" required>
+      #{for} #{a_fields}
+      <label for="#{a_fields:columnName}">#{a_fields:columnNamePascal}:</label>
+      <input type="text" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="new#{class_name_camel}.#{a_fields:columnName}" required>
       #{endfor}
       <button type="submit">Ajouter</button>
     </form>
@@ -46,9 +46,9 @@
       <button (click)="onCloseEditModal()">X</button>
     </header>
     <form (submit)="onSubmitEdit()">
-      #{for} #{fields}
-      <label for="#{fields:columnName}">#{fields:columnNamePascal}:</label>
-      <input type="text" id="#{fields:columnName}" [(ngModel)]="edited#{class_name_camel}.#{fields:columnName}" required>
+      #{for} #{a_fields}
+      <label for="#{a_fields:columnName}">#{a_fields:columnNamePascal}:</label>
+      <input type="text" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="edited#{class_name_camel}.#{a_fields:columnName}" required>
       #{endfor}
       <button type="submit">Modifier</button>
     </form>

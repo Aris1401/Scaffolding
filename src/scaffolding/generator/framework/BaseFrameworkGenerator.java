@@ -16,6 +16,7 @@ public class BaseFrameworkGenerator implements IFrameworkGenerator{
     public boolean generateFramework(ScaffoldDatabaseInfomations scaffoldDatabaseInfomations, ScaffoldingArguments scaffoldingArguments) throws Exception {
         String[] models = scaffoldDatabaseInfomations.getDatabaseTableNames();
         for (String model : models) {
+            if (model.toLowerCase().startsWith("v_")) continue;
             processModel(model, scaffoldDatabaseInfomations, scaffoldingArguments);
         }
 

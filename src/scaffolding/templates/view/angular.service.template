@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { #{class_name_camel} } from './#{class_name_lower}.model';
 
-const baseUrl = 'http://localhost:8080/v1/api/#{class_name_lower}s'; // Remplacer par votre URL d'API
+const baseUrl = 'http://localhost:8080/api/v1/#{class_name_lower}s'; // Remplacer par votre URL d'API
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,10 @@ const baseUrl = 'http://localhost:8080/v1/api/#{class_name_lower}s'; // Remplace
 export class #{class_name_camel}Service {
 
   constructor(private http: HttpClient) { }
+
+  get#{class_name_camel}ById(id : string): Observable<#{class_name_camel}> {
+    return this.http.get<#{class_name_camel}>(`${baseUrl}/${id}`)
+  }
 
   get#{class_name_camel}s(): Observable<#{class_name_camel}[]> {
     return this.http.get<#{class_name_camel}[]>(baseUrl);
@@ -20,11 +24,11 @@ export class #{class_name_camel}Service {
     return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower});
   }
 
-  update#{class_name_camel}(#{primary_key:columnName}: number, #{class_name}: #{class_name_camel}): Observable<#{class_name_camel}> {
-    return this.http.put<#{class_name_camel}>(`${baseUrl}/${#{primary_key:columnName}}`, #{class_name_lower});
+  update#{class_name_camel}(id: string, #{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {
+    return this.http.put<#{class_name_camel}>(`${baseUrl}/${id}`, #{class_name_lower});
   }
 
-   update#{class_name_camel}(#{primary_key:columnName}: number): Observable<void> {
-    return this.http.delete<void>(`${baseUrl}/${#{primary_key:columnName}}`);
+   delete#{class_name_camel}(id : string): Observable<void> {
+    return this.http.delete<void>(`${baseUrl}/${id}`);
   }
 }

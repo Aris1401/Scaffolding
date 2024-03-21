@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonneService } from './personne.service';
-import { #{class_name} } from './#{class_name}.model';
+import { #{class_name} } from './#{class_name_lower}.model';
+import { #{class_name}Service } from './#{class_name_lower}.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-#{class_name_lower}',
   templateUrl: './#{class_name_lower}.component.html',
-  styleUrls: ['./#{class_name_lower}.component.css']
+  styleUrls: ['./#{class_name_lower}.component.css'],
+  imports: [
+      FormsModule,
+      CommonModule
+    ],
+    standalone: true
 })
 export class #{class_name_camel}Component implements OnInit {
 
@@ -22,7 +29,11 @@ export class #{class_name_camel}Component implements OnInit {
   }
 
   get#{class_name_camel}s(): void {
-    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe(#{class_name_lower}s => this.#{class_name_lower}s = #{class_name_lower}s);
+    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe({
+        next: (data) => {
+            this.#{class_name_lower}s = data
+        }
+    });
   }
 
   onCreate(): void {
