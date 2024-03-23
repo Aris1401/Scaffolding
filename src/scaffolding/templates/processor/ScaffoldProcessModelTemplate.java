@@ -6,10 +6,8 @@ import scaffolding.database.ScaffoldDatabaseTableInfo;
 import java.util.ArrayList;
 
 public class ScaffoldProcessModelTemplate extends IScaffoldProcessTemplate{
-    public static final String MODEL_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.model.path.";
 
     public ScaffoldProcessModelTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields, ArrayList<ScaffoldDatabaseTableInfo> foreignKeys, String modelName, String modelPackage, String language) {
-        currentTemplatePath = MODEL_TEMPLATE_PATH_CONFIG_PREFIX;
         ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);
 
         // Getting the fields to not print the primary key
@@ -32,5 +30,10 @@ public class ScaffoldProcessModelTemplate extends IScaffoldProcessTemplate{
         System.out.println("PK: " + primaryKey.getColumnName());
         if (primaryKey.getRawColumnName() != null)
             storeObjectVariable("primary_key", primaryKey);
+    }
+
+    @Override
+    public String getCurrentTemplatePath() {
+        return "scaffold.templates.model.path.";
     }
 }

@@ -13,8 +13,6 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 public abstract class IScaffoldProcessTemplate {
-    String currentTemplatePath = "";
-
     //<editor-fold desc="Variables">
     // Variables
     final String FOR_LOOP = ScaffoldGenerateCode.getVariable("for");
@@ -87,11 +85,13 @@ public abstract class IScaffoldProcessTemplate {
         mappedObjectVariables.put(name, value);
     }
 
+    public abstract String getCurrentTemplatePath();
+
     File getTemplateFileInPathFor(String language) {
         Properties templateProperties = ScaffoldLoader.getTemplatesProperties();
 
         // Getting the template path
-        String templatePath = templateProperties.getProperty(currentTemplatePath + language);
+        String templatePath = templateProperties.getProperty(getCurrentTemplatePath() + language);
 
         return ScaffoldLoader.getFileFromPath(templatePath);
     }

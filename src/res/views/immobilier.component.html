@@ -1,0 +1,56 @@
+<h1>Gestion des immobiliers</h1>
+
+<button (click)="onCreate()">Ajout de immobilier</button>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th>NomImmobilier</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let immobilier of immobiliers">
+
+      <td>{{ immobilier.nomImmobilier }}</td>
+
+      <td>
+        <button (click)="onEdit(immobilier)">Modifier</button>
+        <button (click)="onDelete(immobilier)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isCreateModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Ajouter immobilier</h2>
+      <button (click)="onCloseCreateModal()">X</button>
+    </header>
+    <form (submit)="onSubmitCreate()">
+
+      <label for="nomImmobilier">NomImmobilier:</label>
+      <input type="text" id="nomImmobilier" name="nomImmobilier" [(ngModel)]="newImmobilier.nomImmobilier" required>
+
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Modifier immobilier</h2>
+      <button (click)="onCloseEditModal()">X</button>
+    </header>
+    <form (submit)="onSubmitEdit()">
+
+      <label for="nomImmobilier">NomImmobilier:</label>
+      <input type="text" id="nomImmobilier" name="nomImmobilier" [(ngModel)]="editedImmobilier.nomImmobilier" required>
+
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
+</div>

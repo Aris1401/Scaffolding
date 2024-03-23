@@ -3,11 +3,7 @@ package scaffolding.templates.processor;
 import java.util.ArrayList;
 
 public class ScaffoldProcessRepositoryTemplate extends IScaffoldProcessTemplate{
-    public static final String CONTROLLER_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.repository.path.";
-
     public ScaffoldProcessRepositoryTemplate(String modelName, String repositoryPackage, String modelPackage) {
-        currentTemplatePath = CONTROLLER_TEMPLATE_PATH_CONFIG_PREFIX;
-
         ArrayList<String> imports = new ArrayList<>();
         imports.add(modelPackage + "." + pascalCase(processModelName(modelName)));
 
@@ -16,5 +12,10 @@ public class ScaffoldProcessRepositoryTemplate extends IScaffoldProcessTemplate{
         storeStringVariable("package", repositoryPackage);
 
         storeListVariable("imports", imports);
+    }
+
+    @Override
+    public String getCurrentTemplatePath() {
+        return "scaffold.templates.repository.path.";
     }
 }

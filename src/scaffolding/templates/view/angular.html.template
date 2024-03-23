@@ -10,7 +10,9 @@
       #{endfor}
 
       #{for} #{foreign_keys}
-      
+      <td>
+        #{foreign_keys:columnTypePascal}
+      </td>
       #{endfor}
     </tr>
   </thead>
@@ -18,6 +20,11 @@
     <tr *ngFor="let #{class_name_lower} of #{class_name_lower}s">
       #{for} #{a_fields}
       <td>{{ #{class_name_lower}.#{a_fields:columnName} }}</td>
+      #{endfor}
+      #{for} #{foreign_keys}
+        <td>
+          {{ #{class_name_lower}.#{foreign_keys:ColumnTypeProcessed} ? #{class_name_lower}.#{foreign_keys:ColumnTypeProcessed}.#{foreign_keys:foreignKeyFirstStringColumn} : "" }}
+        </td>
       #{endfor}
       <td>
         <button (click)="onEdit(#{class_name_lower})">Modifier</button>

@@ -55,7 +55,7 @@ public class ScaffoldDatabase {
                         System.out.println(model.toUpperCase() + ": Creation views...");
 
                         // COMPONENT
-                        ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "", scaffoldDatabaseInfomations).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewComponentName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewComponentName, viewComponentCodeLines);
                         System.out.println("Component create successfully...");
@@ -66,7 +66,7 @@ public class ScaffoldDatabase {
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".css", viewCssName, viewCssCodeLines);
 
                         // HTML
-                        ArrayList<String> viewHtmlCodeLines = new ScaffoldProcessViewHTMLTemplate(fields, model, scaffoldDatabaseInfomations).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        ArrayList<String> viewHtmlCodeLines = new ScaffoldProcessViewHTMLTemplate(fields, model).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewHtmlName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".html", viewHtmlName, viewHtmlCodeLines);
                         System.out.println("Html & Css create successfully...");
