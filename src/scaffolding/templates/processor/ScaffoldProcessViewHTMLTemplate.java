@@ -6,17 +6,18 @@ import scaffolding.database.ScaffoldDatabaseInfomations;
 import scaffolding.database.ScaffoldDatabaseTableInfo;
 
 public class ScaffoldProcessViewHTMLTemplate extends IScaffoldProcessTemplate {
-    public static final String VIEWHTML_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.view.html.path.";
-    public ScaffoldProcessViewHTMLTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields, String modelName, ScaffoldDatabaseInfomations scaffoldDatabaseInfomations){
-        currentTemplatePath = VIEWHTML_TEMPLATE_PATH_CONFIG_PREFIX;
-
+    public ScaffoldProcessViewHTMLTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields, String modelName){
         // Assigner language
         ScaffoldDatabaseTableInfo.addLanguagesFor("html", fields);
 
-        ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);
+        // Database informatiions
+        ScaffoldDatabaseInfomations databaseInfomations = ScaffoldDatabaseInfomations.getInstance();
+
+        // Getting the primary keys
+        ScaffoldDatabaseTableInfo primaryKey = databaseInfomations.getTablePrimaryKey(modelName);
 
         // Obtenir les foreign key
-        ArrayList<ScaffoldDatabaseTableInfo> foreignKeys = scaffoldDatabaseInfomations.getTableForeignKeys(modelName);
+        ArrayList<ScaffoldDatabaseTableInfo> foreignKeys = databaseInfomations.getTableForeignKeys(modelName);
 
         ArrayList<ScaffoldDatabaseTableInfo> availableFields = new ArrayList<>();
         // Enlever la clee primaire de la liste
@@ -36,5 +37,10 @@ public class ScaffoldProcessViewHTMLTemplate extends IScaffoldProcessTemplate {
         System.out.println("PK: " + primaryKey.getColumnName());
         if (primaryKey.getRawColumnName() != null)
             storeObjectVariable("primary_key", primaryKey);
+    }
+
+    @Override
+    public String getCurrentTemplatePath() {
+        return "scaffold.templates.view.html.path.";
     }
 }
