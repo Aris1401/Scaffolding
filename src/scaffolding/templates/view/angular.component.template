@@ -1,11 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonneService } from './personne.service';
-import { #{class_name} } from './#{class_name}.model';
+import { #{class_name} } from './#{class_name_lower}.model';
+import { #{class_name}Service } from './#{class_name_lower}.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+#{for} #{foreign_keys}
+import { #{foreign_keys:columnTypePascal} } from './#{foreign_keys:columnTypeProcessed}.model'
+import { #{foreign_keys:columnTypePascal}Service } from './#{foreign_keys:columnTypeProcessed}.service'
+#{endfor}
 
 @Component({
   selector: 'app-#{class_name_lower}',
   templateUrl: './#{class_name_lower}.component.html',
-  styleUrls: ['./#{class_name_lower}.component.css']
+  styleUrls: ['./#{class_name_lower}.component.css'],
+  imports: [
+      FormsModule,
+      CommonModule
+    ],
+    standalone: true
 })
 export class #{class_name_camel}Component implements OnInit {
 
@@ -15,15 +26,41 @@ export class #{class_name_camel}Component implements OnInit {
   isCreateModalOpen = false;
   isEditModalOpen = false;
 
-  constructor(private #{class_name_lower}Service: #{class_name_camel}Service) { }
+  #{for} #{foreign_keys}
+  #{foreign_keys:columnTypeProcessed}s : #{foreign_keys:columnTypePascal}[] = []
+  #{endfor}
+
+  constructor(
+    #{for} #{foreign_keys}
+    private #{foreign_keys:columnTypeProcessed}Service : #{foreign_keys:columnTypePascal}Service,
+    #{endfor}
+    private #{class_name_lower}Service: #{class_name_camel}Service
+  ) { }
 
   ngOnInit(): void {
     this.get#{class_name_camel}s();
+    #{for} #{foreign_keys}
+    this.get#{foreign_keys:columnTypePascal}s();
+    #{endfor}
   }
 
   get#{class_name_camel}s(): void {
-    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe(#{class_name_lower}s => this.#{class_name_lower}s = #{class_name_lower}s);
+    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe({
+        next: (data) => {
+            this.#{class_name_lower}s = data
+        }
+    });
   }
+
+  #{for} #{foreign_keys}
+    get#{foreign_keys:columnTypePascal}s(): void {
+        this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}s().subscribe({
+            next: (data) => {
+                this.#{foreign_keys:columnTypeProcessed}s = data
+            }
+        });
+    }
+  #{endfor}
 
   onCreate(): void {
     this.isCreateModalOpen = true;

@@ -54,6 +54,7 @@ public class ScaffoldGenerateCode {
     public static boolean generateCodeInPath(String path, String language, String fileName, ArrayList<String> codeLines) {
         // Getting the directory
         File directoryPath = getDirectory(path, true);
+        System.out.println("DIrectory: " + directoryPath);
 
         // Getting the file
         String filePath = directoryPath.getAbsolutePath() + "/" + fileName + getFileExtensionFor(language);
@@ -101,6 +102,7 @@ public class ScaffoldGenerateCode {
 
     static File getDirectory(String dirPath, boolean create) {
         File dirFile = new File(dirPath);
+
         if (create)
             if(!dirFile.exists()) dirFile.mkdirs();
 

@@ -1,5 +1,6 @@
 package scaffolding.generator.framework;
 
+import scaffolding.ScaffoldDatabase;
 import scaffolding.args.ScaffoldingArguments;
 import scaffolding.database.ScaffoldDatabaseInfomations;
 import scaffolding.database.ScaffoldDatabaseTableInfo;
@@ -15,6 +16,7 @@ public class BaseFrameworkGenerator implements IFrameworkGenerator{
     public boolean generateFramework(ScaffoldDatabaseInfomations scaffoldDatabaseInfomations, ScaffoldingArguments scaffoldingArguments) throws Exception {
         String[] models = scaffoldDatabaseInfomations.getDatabaseTableNames();
         for (String model : models) {
+            if (model.toLowerCase().startsWith("v_")) continue;
             processModel(model, scaffoldDatabaseInfomations, scaffoldingArguments);
         }
 
@@ -25,8 +27,18 @@ public class BaseFrameworkGenerator implements IFrameworkGenerator{
         ArrayList<ScaffoldDatabaseTableInfo> fields = scaffoldDatabaseInfomations.getColumns(model);
         ScaffoldDatabaseTableInfo.addLanguagesFor(scaffoldingArguments.getLanguage(), fields);
 
+        // Getting the know foreign keys of the table
+        ArrayList<ScaffoldDatabaseTableInfo> foreignKeys = scaffoldDatabaseInfomations.getTableForeignKeys(model);
+        ArrayList<ScaffoldDatabaseTableInfo> filteredFields = new ArrayList<>();
+        for (int i = 0; i < fields.size(); i++) {
+            if (ScaffoldDatabaseInfomations.checkIfColumnIsPrimaryKey(fields.get(i).getColumnName(), foreignKeys) == null) {
+                filteredFields.add(fields.get(i));
+            }
+        }
+        fields.clear();
+
         // Model codeLines
-        ArrayList<String> codeLines = new ScaffoldProcessModelTemplate(fields, model, scaffoldingArguments.getModelPackage(), scaffoldingArguments.getLanguage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+        ArrayList<String> codeLines = new ScaffoldProcessModelTemplate(filteredFields, foreignKeys,  model, scaffoldingArguments.getModelPackage(), scaffoldingArguments.getLanguage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
         // Generation the code in the path
         String fileName = IScaffoldProcessTemplate.pascalCase(IScaffoldProcessTemplate.processModelName(model));

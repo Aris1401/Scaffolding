@@ -19,6 +19,10 @@ import scaffolding.database.ScaffoldDatabaseInfomations;
 import java.util.ArrayList;
 #{endif}
 
+#{if} framework:springboot
+import jakarta.persistence.*;
+#{endif}
+
 #{if} language:dotnet
 namespace #{namespace};
 #{endif}
@@ -27,6 +31,14 @@ namespace #{namespace};
 @Entity
 #{endif}
 public class #{class_name} {
+    #{if} isset:primary_key
+    #{innerif} framework:springboot
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    #{innerendif}
+    #{primary_key:languageType} #{primary_key:columnName};
+    #{endif}
+
     #{for} #{fields}
     #{if} language:java
     #{field:languageType} #{fields:columnName};
@@ -37,7 +49,25 @@ public class #{class_name} {
     #{endif}
     #{endfor}
 
+    #{if} framework:springboot
+    #{for} #{foreign_keys}
+    @ManyToOne
+    @JoinColumn(name = "#{foreign_keys:rawColumnName}")
+    #{foreign_keys:columnTypePascal} #{foreign_keys:columnTypeProcessed};
+    #{endfor}
+    #{endif}
+
     #{if} language:java
+    #{innerif} isset:primary_key
+    public void set#{primary_key:columnNamePascal}(#{primary_key:languageType} #{primary_key:columnName}) {
+        this.#{primary_key:columnName} = #{primary_key:columnName};
+    }
+
+    public #{primary_key:languageType} get#{primary_key:columnNamePascal}() {
+        return this.#{primary_key:columnName};
+    }
+    #{innerendif}
+
     #{for} #{fields}
     public void set#{fields:columnNamePascal}(#{fields:languageType} #{fields:columnName}) {
         this.#{fields:columnName} = #{fields:columnName};
@@ -48,6 +78,16 @@ public class #{class_name} {
     }
     #{endfor}
     #{endif}
+
+    #{for} #{foreign_keys}
+    public void set#{foreign_keys:columnTypePascal}(#{foreign_keys:columnTypePascal} #{foreign_keys:columnTypeProcessed}) {
+        this.#{fields:columnTypeProcessed} = #{fields:columnTypeProcessed};
+    }
+
+    public #{fields:columnTypePascal} get#{fields:columnNamePascal}() {
+        return this.#{fields:columnTypeProcessed};
+    }
+    #{endfor}
 
     #{if} framework:base
     public void save#{class_name}() {

@@ -22,6 +22,9 @@ public abstract class IScaffoldProcessTemplate {
 
     final String IF_CONDITION = ScaffoldGenerateCode.getVariable("if");
     final String ENDIF_CONDITION = ScaffoldGenerateCode.getVariable("endif");
+
+    final String INNER_IF_CONDITION = ScaffoldGenerateCode.getVariable("innerif");
+    final String INNER_ENDIF_CONDITION = ScaffoldGenerateCode.getVariable("innerendif");
     //</editor-fold>
 
     // Storing the possible variables
@@ -51,6 +54,18 @@ public abstract class IScaffoldProcessTemplate {
         }
 
         if (isListVariable(variableName)) return (T) mappedListVariables.get(variableName);
+        if (isStringVariable(variableName)) return (T) mappedStringVariables.get(variableName);
+        if (isObjectVariable(variableName)) return (T) mappedObjectVariables.get(variableName);
+
+        return null;
+    }
+
+    public <T> T getNonListVariable(String variableName) {
+        if (variableName.contains(CALL_SEPARATOR)) {
+            int call_separator_index = variableName.indexOf(CALL_SEPARATOR);
+            variableName = variableName.substring(0, call_separator_index);
+        }
+
         if (isStringVariable(variableName)) return (T) mappedStringVariables.get(variableName);
         if (isObjectVariable(variableName)) return (T) mappedObjectVariables.get(variableName);
 
@@ -162,6 +177,19 @@ public abstract class IScaffoldProcessTemplate {
     private ArrayList<String> processLines(String language, String framework, ArrayList<String> processedLines) {
         for (int i = 0; i < processedLines.size(); i++) {
             String line = processedLines.get(i);
+            String processedLine = processBlocks(line, INNER_IF_CONDITION, INNER_ENDIF_CONDITION, () -> {
+                return processConditions(language, framework);
+            });
+
+            if (processedLine != null) {
+                processedLines.set(i, processedLine);
+            } else {
+                processedLines.set(i, "");
+            }
+        }
+
+        for (int i = 0; i < processedLines.size(); i++) {
+            String line = processedLines.get(i);
             String processedLine = processBlocks(line, IF_CONDITION, ENDIF_CONDITION, () -> {
                 return processConditions(language, framework);
             });
@@ -203,6 +231,7 @@ public abstract class IScaffoldProcessTemplate {
     final String CONDITION_SEPARATOR = ":";
     final String LANGUAGE_CONDITION = "language";
     final String FRAMEWORK_CONDITION = "framework";
+    final String ISSET_CONDITION = "isset";
     private String processConditions(String language, String framework) {
         StringBuilder processed = new StringBuilder();
 
@@ -216,16 +245,28 @@ public abstract class IScaffoldProcessTemplate {
         String conditioner = conditionInWhole[1];
 
         String toEqual = language;
-        if (conditionStarter.equals(FRAMEWORK_CONDITION)) {
-            if (framework == null)
-                throw new RuntimeException("Framework non specifier.");
 
-            toEqual = framework;
-        } else if (conditionStarter.equals(LANGUAGE_CONDITION)) {
-            toEqual = language;
+        // Condition
+        boolean conditionRes = false;
+        switch (conditionStarter) {
+            case FRAMEWORK_CONDITION -> {
+                if (framework == null)
+                    throw new RuntimeException("Framework non specifier.");
+                toEqual = framework;
+
+                conditionRes = conditioner.equals(toEqual);
+            }
+            case LANGUAGE_CONDITION -> {
+                toEqual = language;
+
+                conditionRes = conditioner.equals(toEqual);
+            }
+            case ISSET_CONDITION -> {
+                conditionRes = !(getVariable(conditioner) == null);
+            }
         }
 
-        if (conditioner.equals(toEqual)) {
+        if (conditionRes) {
             for(int i = 1; i < buffuredLines.size() - 1; i++) {
                 processed.append(buffuredLines.get(i));
                 processed.append(System.lineSeparator());
@@ -293,7 +334,12 @@ public abstract class IScaffoldProcessTemplate {
                         // Obtenir les variables sur une ligne
                         String[] calls = getCallsInOneLine(buffuredLines.get(i));
                         for (String call : calls) {
-                            String callProcessed = processCall(call, variableName, info);
+                            String callProcessed = "";
+
+                            Object variableValue = getNonListVariable(call);
+                            if (variableValue != null) callProcessed = processCall(call, call, variableValue);
+                            else callProcessed = processCall(call, variableName, info);
+
                             line = line.replace(VARIABLE_NOTATION_START + call + VARIABLE_NOTATION_END, callProcessed);
                         }
 
@@ -322,7 +368,7 @@ public abstract class IScaffoldProcessTemplate {
                 invokedMethod.setAccessible(true);
                 return invokedMethod.invoke(invokedObject).toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Failed on call: " + call + " | Variable name: " + variableName + "\nWith error: " + e.getMessage());
             }
         } else {
             try {
@@ -353,6 +399,7 @@ public abstract class IScaffoldProcessTemplate {
     }
 
     public static String processModelName(String input) {
+        if (input == null) return null;
         StringBuilder sb = new StringBuilder();
         String[] parts = input.split("_");
 

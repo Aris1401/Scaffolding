@@ -31,7 +31,7 @@ button {
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  /* display: none; Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
@@ -55,4 +55,10 @@ button {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.modal-content > form {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
 }

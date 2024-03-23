@@ -130,19 +130,42 @@ public class ScaffoldDatabaseInfomations {
 
         return databaseTableInfo;
     }
-    public static ScaffoldDatabaseTableInfo getTableForeignKeys(String tableName) throws SQLException {
+    public ArrayList<ScaffoldDatabaseTableInfo> getTableForeignKeys(String tableName) {
         Connection connection = loadConnection();
-        ScaffoldDatabaseTableInfo databaseTableInfo = new ScaffoldDatabaseTableInfo();
-        DatabaseMetaData metaData = connection.getMetaData();
-        ResultSet resultSet = metaData.getExportedKeys(null, null, tableName);
+        ArrayList<ScaffoldDatabaseTableInfo> infos = new ArrayList<>();
 
-        while (resultSet.next()) {
-            String fkTableName = resultSet.getString("FKTABLE_NAME");
-            // String fkColumnName = resultSet.getString("FKCOLUMN_NAME");
-            // String type = resultSet.getString("TYPE_NAME");
-            databaseTableInfo = new ScaffoldDatabaseTableInfo(resultSet.getString("FKCOLUMN_NAME"), columnNameAndTypeRes.getString("TYPE_NAME"));
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet resultSet = metaData.getImportedKeys(null, null, tableName);
+
+            while (resultSet.next()) {
+                ScaffoldDatabaseTableInfo databaseTableInfo = new ScaffoldDatabaseTableInfo();
+
+                String fkTableName = resultSet.getString("FKTABLE_NAME");
+                String fkColumnName = resultSet.getString("FKCOLUMN_NAME");
+                // Assuming correct column name for type is "PKTABLE_NAME"
+                String pkTableName = resultSet.getString("PKTABLE_NAME");
+                String pkTableId = resultSet.getString("PKCOLUMN_NAME");
+
+                databaseTableInfo = new ScaffoldDatabaseTableInfo(fkColumnName, pkTableName);
+                databaseTableInfo.setIsForeignKey(fkTableName, pkTableId);
+
+                infos.add(databaseTableInfo);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-        return databaseTableInfo;
+        return infos;
+    }
+
+    public static ScaffoldDatabaseTableInfo checkIfColumnIsPrimaryKey(String columnName, ArrayList<ScaffoldDatabaseTableInfo> knownForeignKeys) {
+        for (ScaffoldDatabaseTableInfo foreignKey : knownForeignKeys) {
+            if (columnName.equalsIgnoreCase(foreignKey.getColumnName())) {
+                return foreignKey;
+            }
+        }
+
+        return null;
     }
 }

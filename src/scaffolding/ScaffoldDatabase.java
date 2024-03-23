@@ -9,10 +9,11 @@ import scaffolding.templates.processor.ScaffoldProcessViewComponentTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewCssTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewHTMLTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewModelTemplate;
-import scaffolding.templates.processor.ScaffoldViewServiceTemplate;
+import scaffolding.templates.processor.ScaffoldProcessViewServiceTemplate;
 import scaffolding.generator.framework.BaseFrameworkGenerator;
 import scaffolding.generator.framework.IFrameworkGenerator;
 import scaffolding.loader.ScaffoldLoader;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -45,31 +46,39 @@ public class ScaffoldDatabase {
 
             String[] models = scaffoldDatabaseInfomations.getDatabaseTableNames();
             for (String model : models) {
+                if (model.toLowerCase().startsWith("v_")) continue;
                 // Creation de view
                 ArrayList<ScaffoldDatabaseTableInfo> fields = scaffoldDatabaseInfomations.getColumns(model);
+                ScaffoldDatabaseTableInfo.addLanguagesFor("ts", fields);
                 if(scaffoldingArguments.getView() != null && !scaffoldingArguments.getViewoutputdir().isEmpty()) {
                     if(scaffoldingArguments.getView().compareTo("angular")==0){
-                        System.out.println("Creation views...");
-                        ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        System.out.println(model.toUpperCase() + ": Creation views...");
+
+                        // COMPONENT
+                        ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "", scaffoldDatabaseInfomations).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewComponentName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewComponentName, viewComponentCodeLines);
                         System.out.println("Component create successfully...");
-                        
+
+                        // CSS
                         ArrayList<String> viewCssCodeLines = new ScaffoldProcessViewCssTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewCssName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".css", viewCssName, viewCssCodeLines);
 
-                        ArrayList<String> viewHtmlCodeLines = new ScaffoldProcessViewHTMLTemplate(fields, model).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        // HTML
+                        ArrayList<String> viewHtmlCodeLines = new ScaffoldProcessViewHTMLTemplate(fields, model, scaffoldDatabaseInfomations).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewHtmlName = model + ".component";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".html", viewHtmlName, viewHtmlCodeLines);
                         System.out.println("Html & Css create successfully...");
 
+                        // MODEL
                         ArrayList<String> viewModelCodeLines = new ScaffoldProcessViewModelTemplate(fields, model).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewModelName = model + ".model";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewModelName, viewModelCodeLines);
                         System.out.println("Model create successfully...");
 
-                        ArrayList<String> viewServiceCodeLines = new ScaffoldViewServiceTemplate(model,"").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                        // SERVICE
+                        ArrayList<String> viewServiceCodeLines = new ScaffoldProcessViewServiceTemplate(model,"").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
                         String viewServiceName = model + ".service";
                         ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewServiceName, viewServiceCodeLines);
                         System.out.println("Service create successfully...");

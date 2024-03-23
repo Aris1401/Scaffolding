@@ -1,12 +1,17 @@
 package scaffolding.templates.processor;
 
 import java.util.ArrayList;
+
+import scaffolding.database.ScaffoldDatabaseInfomations;
 import scaffolding.database.ScaffoldDatabaseTableInfo;
 
 public class ScaffoldProcessViewModelTemplate extends IScaffoldProcessTemplate{
     public static final String VIEWMODEL_TEMPLATE_PATH_CONFIG_PREFIX = "scaffold.templates.view.model.path.";
     public ScaffoldProcessViewModelTemplate(ArrayList<ScaffoldDatabaseTableInfo> fields,String modelName){
         currentTemplatePath = VIEWMODEL_TEMPLATE_PATH_CONFIG_PREFIX;
+
+        ArrayList<ScaffoldDatabaseTableInfo> foreignKeys = ScaffoldDatabaseInfomations.getInstance().getTableForeignKeys(modelName);
+        storeListVariable("foreign_keys", foreignKeys);
 
         storeListVariable("fields", fields);
 

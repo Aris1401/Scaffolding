@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 #{endif}
 
 #{if} language:dotnet
@@ -30,8 +31,11 @@ using #{imports};
 namespace #{package};
 #{endif}
 
+#{if} framework:springboot
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/#{class_name_lower}s")
+#{endif}
 public class #{class_name}Controller {
     @Autowired
     private #{class_name}Service #{class_name_camel}Service;
@@ -42,7 +46,7 @@ public class #{class_name}Controller {
     }
 
     @GetMapping("/{id}")
-    public List<#{class_name}> get#{class_name}ById(@PathVariable int id) {
+    public #{class_name} get#{class_name}ById(@PathVariable int id) {
         return #{class_name_camel}Service.get#{class_name}ById(id);
     }
 
@@ -58,6 +62,6 @@ public class #{class_name}Controller {
 
     @PutMapping("/{id}")
     public #{class_name} update#{class_name}(@PathVariable int id, @RequestBody #{class_name} #{class_name_camel}) {
-        return #{class_name_camel}Service.update#{class_name}ById(id);
+        return #{class_name_camel}Service.update#{class_name}ById(id, #{class_name_camel});
     }
 }
