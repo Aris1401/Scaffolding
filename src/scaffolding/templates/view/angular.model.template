@@ -1,5 +1,8 @@
 export class #{class_name_camel} {
     #{for} #{fields}
     #{fields:columnName}: string = ""
-    #{endfor} 
+    #{endfor}
+    #{for} #{foreign_keys}
+    #{foreign_keys:columnTypeProcessed} : any = ""
+    #{endfor}
 }

@@ -8,6 +8,10 @@
       #{for} #{a_fields}
       <th>#{a_fields:columnNamePascal}</th>
       #{endfor}
+
+      #{for} #{foreign_keys}
+      
+      #{endfor}
     </tr>
   </thead>
   <tbody>
@@ -32,7 +36,13 @@
     <form (submit)="onSubmitCreate()">
       #{for} #{a_fields}
       <label for="#{a_fields:columnName}">#{a_fields:columnNamePascal}:</label>
-      <input type="text" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="new#{class_name_camel}.#{a_fields:columnName}" required>
+      <input type="#{a_fields:languageType}" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="new#{class_name_camel}.#{a_fields:columnName}" required>
+      #{endfor}
+
+      #{for} #{foreign_keys}
+      <select name="#{foreign_keys:columnName}" [(ngModel)]="new#{class_name_camel}.#{foreign_keys:columnName}">
+        <option *ngFor="let #{foreign_keys:columnTypeProcessed} of #{foreign_keys:columnTypeProcessed}s" value="{{ #{foreign_keys:columnTypeProcessed}.#{foreign_keys:foreignKeyId} }}">{{ #{foreign_keys:columnTypeProcessed}.#{foreign_keys:foreignKeyFirstStringColumn} }}</option>
+      </select>
       #{endfor}
       <button type="submit">Ajouter</button>
     </form>
@@ -48,7 +58,12 @@
     <form (submit)="onSubmitEdit()">
       #{for} #{a_fields}
       <label for="#{a_fields:columnName}">#{a_fields:columnNamePascal}:</label>
-      <input type="text" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="edited#{class_name_camel}.#{a_fields:columnName}" required>
+      <input type="#{a_fields:languageType}" id="#{a_fields:columnName}" name="#{a_fields:columnName}" [(ngModel)]="edited#{class_name_camel}.#{a_fields:columnName}" required>
+      #{endfor}
+      #{for} #{foreign_keys}
+        <select name="#{foreign_keys:columnName}" [(ngModel)]="edited#{class_name_camel}.#{foreign_keys:columnName}">
+          <option *ngFor="let #{foreign_keys:columnTypeProcessed} of #{foreign_keys:columnTypeProcessed}s" value="{{ #{foreign_keys:columnTypeProcessed}.#{foreign_keys:foreignKeyId} }}">{{ #{foreign_keys:columnTypeProcessed}.#{foreign_keys:foreignKeyFirstStringColumn} }}</option>
+        </select>
       #{endfor}
       <button type="submit">Modifier</button>
     </form>

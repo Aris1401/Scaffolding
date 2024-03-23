@@ -145,9 +145,10 @@ public class ScaffoldDatabaseInfomations {
                 String fkColumnName = resultSet.getString("FKCOLUMN_NAME");
                 // Assuming correct column name for type is "PKTABLE_NAME"
                 String pkTableName = resultSet.getString("PKTABLE_NAME");
+                String pkTableId = resultSet.getString("PKCOLUMN_NAME");
 
                 databaseTableInfo = new ScaffoldDatabaseTableInfo(fkColumnName, pkTableName);
-                databaseTableInfo.setIsForeignKey(fkTableName);
+                databaseTableInfo.setIsForeignKey(fkTableName, pkTableId);
 
                 infos.add(databaseTableInfo);
             }

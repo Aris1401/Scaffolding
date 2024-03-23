@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { #{class_name_camel} } from './#{class_name_lower}.model';
 #{for} #{foreign_keys}
 import { #{foreign_keys:columnTypePascal} } from './#{foreign_keys:columnTypeProcessed}.model'
@@ -31,6 +30,20 @@ export class #{class_name_camel}Service {
   }
 
   create#{class_name_camel}(#{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {
+    const {#{primary_key:columnName}, ...#{class_name_lower}WithoutId} = #{class_name_lower};
+
+    #{for} #{foreign_keys}
+    this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}ById(#{class_name_lower}WithoutId.#{foreign_keys:columnName}).subscribe({
+        next: (data) => {
+            #{class_name_lower}WithoutId.#{foreign_keys:columnTypeProcessed} = data
+        }
+    });
+    #{endfor}
+
+    return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower}WithoutId);
+  }
+
+  create#{class_name_camel}(#{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {
       const {#{primary_key:columnName}, ...#{class_name_lower}WithoutId} = #{class_name_lower};
 
       #{for} #{foreign_keys}
@@ -38,44 +51,30 @@ export class #{class_name_camel}Service {
       #{endfor}
 
       // Combine all observables into a single observable using forkJoin
-      return forkJoin([
+      return forkJoin([#{foreign_keys.map(fk => "#{fk:columnName}$").join(', ')}]).pipe(
+        map((results) => {
           #{for} #{foreign_keys}
-          #{foreign_keys:columnName}$.pipe(
-              tap((data) => {
-                  #{class_name_lower}WithoutId.#{foreign_keys:columnTypeProcessed} = data;
-              }),
-          ),
+          #{class_name_lower}WithoutId.#{foreign_keys:columnTypeProcessed} = results[#{foreign_keys:index}];
           #{endfor}
-      ]).pipe(
-          // Switch to the HTTP POST request once all data is fetched and updated
-          switchMap(() => {
-              console.log(#{class_name_lower}WithoutId);
-              return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower}WithoutId);
-          })
+          console.log(#{class_name_lower}WithoutId);
+          return #{class_name_lower}WithoutId;
+        }),
+        // Once the data is updated, make the HTTP post request
+        switchMap((updated#{class_name_camel}WithoutId) =>
+          this.http.post<#{class_name_camel}>(baseUrl, updated#{class_name_camel}WithoutId)
+        )
       );
   }
 
+
   update#{class_name_camel}(id: string, #{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {
     #{for} #{foreign_keys}
-      const #{foreign_keys:columnName}$ = this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}ById(#{class_name_lower}.#{foreign_keys:columnName});
-      #{endfor}
-
-      // Combine all observables into a single observable using forkJoin
-      return forkJoin([
-          #{for} #{foreign_keys}
-          #{foreign_keys:columnName}$.pipe(
-              tap((data) => {
-                  #{class_name_lower}.#{foreign_keys:columnTypeProcessed} = data;
-              }),
-          ),
-          #{endfor}
-      ]).pipe(
-          // Switch to the HTTP POST request once all data is fetched and updated
-          switchMap(() => {
-              console.log(#{class_name_lower});
-              return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower});
-          })
-      );
+        this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}ById(#{class_name_lower}.#{foreign_keys:columnName}).subscribe({
+            next: (data) => {
+                #{class_name_lower}.#{foreign_keys:columnTypeProcessed} = data
+            }
+        });
+    #{endfor}
 
     return this.http.put<#{class_name_camel}>(`${baseUrl}/${id}`, #{class_name_lower});
   }

@@ -56,3 +56,9 @@ button {
   align-items: center;
   margin-bottom: 10px;
 }
+
+.modal-content > form {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
