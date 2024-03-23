@@ -8,6 +8,14 @@ public class ScaffoldingConfigurationInShell{
       Scanner scanner = new Scanner(System.in);
       ScaffoldingArguments scaffoldingArguments = new ScaffoldingArguments();
 
+      System.out.println("Enable authentification ?! : ");
+      String authentification = scanner.nextLine();
+      System.out.println("Name of the table where the authentification data is : ");
+      String tableName = scanner.nextLine();
+      System.out.println("Name of the column for email : ");
+      String emailColumn = scanner.nextLine();
+      System.out.println("Name of the column for password : ");
+      String passWordColumn = scanner.nextLine();
       System.out.println("Host : ");
       String host = scanner.nextLine();
       System.out.println("Database : ");
@@ -31,6 +39,10 @@ public class ScaffoldingConfigurationInShell{
       System.out.println("Output directory for view : ");
       String viewoutputdir = scanner.nextLine();
 
+      scaffoldingArguments.setAuthentification(authentification);
+      scaffoldingArguments.setTableName(tableName);
+      scaffoldingArguments.setEmailColumn(emailColumn);
+      scaffoldingArguments.setPasswordColumn(passwordColumn);
       scaffoldingArguments.setHost(host);
       scaffoldingArguments.setDatabase(database);
       scaffoldingArguments.setDatabaseName(databaseName);
