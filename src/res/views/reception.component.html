@@ -1,0 +1,86 @@
+<h1>Gestion des receptions</h1>
+
+<button (click)="onCreate()">Ajout de reception</button>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th>Anneeutilisation</th>
+      <th>DateReception</th>
+      <th>Prix</th>
+      <th>Taux</th>
+
+      <td>
+        Commande
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reception of receptions">
+
+      <td>{{ reception.anneeutilisation }}</td>
+      <td>{{ reception.dateReception }}</td>
+      <td>{{ reception.prix }}</td>
+      <td>{{ reception.taux }}</td>
+
+        <td>
+          {{ reception.commande ? reception.commande. : "" }}
+        </td>
+      <td>
+        <button (click)="onEdit(reception)">Modifier</button>
+        <button (click)="onDelete(reception)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isCreateModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Ajouter reception</h2>
+      <button (click)="onCloseCreateModal()">X</button>
+    </header>
+    <form (submit)="onSubmitCreate()">
+
+      <label for="anneeutilisation">Anneeutilisation:</label>
+      <input type="number" id="anneeutilisation" name="anneeutilisation" [(ngModel)]="newReception.anneeutilisation" required>
+      <label for="dateReception">DateReception:</label>
+      <input type="datetime" id="dateReception" name="dateReception" [(ngModel)]="newReception.dateReception" required>
+      <label for="prix">Prix:</label>
+      <input type="number" id="prix" name="prix" [(ngModel)]="newReception.prix" required>
+      <label for="taux">Taux:</label>
+      <input type="number" id="taux" name="taux" [(ngModel)]="newReception.taux" required>
+
+      <select name="idCommande" [(ngModel)]="newReception.idCommande">
+        <option *ngFor="let commande of commandes" value="{{ commande.idCommande }}">{{ commande. }}</option>
+      </select>
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Modifier reception</h2>
+      <button (click)="onCloseEditModal()">X</button>
+    </header>
+    <form (submit)="onSubmitEdit()">
+
+      <label for="anneeutilisation">Anneeutilisation:</label>
+      <input type="number" id="anneeutilisation" name="anneeutilisation" [(ngModel)]="editedReception.anneeutilisation" required>
+      <label for="dateReception">DateReception:</label>
+      <input type="datetime" id="dateReception" name="dateReception" [(ngModel)]="editedReception.dateReception" required>
+      <label for="prix">Prix:</label>
+      <input type="number" id="prix" name="prix" [(ngModel)]="editedReception.prix" required>
+      <label for="taux">Taux:</label>
+      <input type="number" id="taux" name="taux" [(ngModel)]="editedReception.taux" required>
+
+        <select name="idCommande" [(ngModel)]="editedReception.idCommande">
+          <option *ngFor="let commande of commandes" value="{{ commande.idCommande }}">{{ commande. }}</option>
+        </select>
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
+</div>

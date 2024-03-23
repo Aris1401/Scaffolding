@@ -1,0 +1,86 @@
+<h1>Gestion des commandes</h1>
+
+<button (click)="onCreate()">Ajout de commande</button>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th>DateCommande</th>
+      <th>Quantite</th>
+
+      <td>
+        Fournisseur
+      </td>
+      <td>
+        Immobilier
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let commande of commandes">
+
+      <td>{{ commande.dateCommande }}</td>
+      <td>{{ commande.quantite }}</td>
+
+        <td>
+          {{ commande.fournisseur ? commande.fournisseur.nomFournisseur : "" }}
+        </td>
+        <td>
+          {{ commande.immobilier ? commande.immobilier.nomImmobilier : "" }}
+        </td>
+      <td>
+        <button (click)="onEdit(commande)">Modifier</button>
+        <button (click)="onDelete(commande)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isCreateModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Ajouter commande</h2>
+      <button (click)="onCloseCreateModal()">X</button>
+    </header>
+    <form (submit)="onSubmitCreate()">
+
+      <label for="dateCommande">DateCommande:</label>
+      <input type="datetime" id="dateCommande" name="dateCommande" [(ngModel)]="newCommande.dateCommande" required>
+      <label for="quantite">Quantite:</label>
+      <input type="number" id="quantite" name="quantite" [(ngModel)]="newCommande.quantite" required>
+
+      <select name="idFournisseur" [(ngModel)]="newCommande.idFournisseur">
+        <option *ngFor="let fournisseur of fournisseurs" value="{{ fournisseur.idFournisseur }}">{{ fournisseur.nomFournisseur }}</option>
+      </select>
+      <select name="idImmobilier" [(ngModel)]="newCommande.idImmobilier">
+        <option *ngFor="let immobilier of immobiliers" value="{{ immobilier.idImmobilier }}">{{ immobilier.nomImmobilier }}</option>
+      </select>
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Modifier commande</h2>
+      <button (click)="onCloseEditModal()">X</button>
+    </header>
+    <form (submit)="onSubmitEdit()">
+
+      <label for="dateCommande">DateCommande:</label>
+      <input type="datetime" id="dateCommande" name="dateCommande" [(ngModel)]="editedCommande.dateCommande" required>
+      <label for="quantite">Quantite:</label>
+      <input type="number" id="quantite" name="quantite" [(ngModel)]="editedCommande.quantite" required>
+
+        <select name="idFournisseur" [(ngModel)]="editedCommande.idFournisseur">
+          <option *ngFor="let fournisseur of fournisseurs" value="{{ fournisseur.idFournisseur }}">{{ fournisseur.nomFournisseur }}</option>
+        </select>
+        <select name="idImmobilier" [(ngModel)]="editedCommande.idImmobilier">
+          <option *ngFor="let immobilier of immobiliers" value="{{ immobilier.idImmobilier }}">{{ immobilier.nomImmobilier }}</option>
+        </select>
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
+</div>

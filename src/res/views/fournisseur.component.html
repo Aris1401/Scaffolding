@@ -1,0 +1,56 @@
+<h1>Gestion des fournisseurs</h1>
+
+<button (click)="onCreate()">Ajout de fournisseur</button>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th>NomFournisseur</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let fournisseur of fournisseurs">
+
+      <td>{{ fournisseur.nomFournisseur }}</td>
+
+      <td>
+        <button (click)="onEdit(fournisseur)">Modifier</button>
+        <button (click)="onDelete(fournisseur)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isCreateModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Ajouter fournisseur</h2>
+      <button (click)="onCloseCreateModal()">X</button>
+    </header>
+    <form (submit)="onSubmitCreate()">
+
+      <label for="nomFournisseur">NomFournisseur:</label>
+      <input type="text" id="nomFournisseur" name="nomFournisseur" [(ngModel)]="newFournisseur.nomFournisseur" required>
+
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+    <header>
+      <h2>Modifier fournisseur</h2>
+      <button (click)="onCloseEditModal()">X</button>
+    </header>
+    <form (submit)="onSubmitEdit()">
+
+      <label for="nomFournisseur">NomFournisseur:</label>
+      <input type="text" id="nomFournisseur" name="nomFournisseur" [(ngModel)]="editedFournisseur.nomFournisseur" required>
+
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
+</div>

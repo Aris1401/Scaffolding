@@ -84,7 +84,7 @@ public class #{class_name} {
         this.#{fields:columnTypeProcessed} = #{fields:columnTypeProcessed};
     }
 
-    public #{fields:columnTypePascal} get#{fields:columnNamePascal}() {
+    public #{fields:columnTypePascal} get#{fields:columnTypePascal}() {
         return this.#{fields:columnTypeProcessed};
     }
     #{endfor}
