@@ -3,6 +3,10 @@ package scaffolding.args;
 import java.util.Arrays;
 
 public class ScaffoldingArguments {
+    String authentification;
+    String tableName;
+    String emailColumn;
+    String passWordColumn;
     String host;
     String database;
     String databaseName;
@@ -15,6 +19,46 @@ public class ScaffoldingArguments {
     String framework;
     String view;
     String viewoutputdir;
+
+    public String getAuthentification() {
+        return authentification;
+    }
+
+    public void setAuthentification(String authentification) {
+        this.authentification = authentification;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getEmailColumn() {
+        return emailColumn;
+    }
+
+    public void setEmailColumn(String emailColumn) {
+        this.emailColumn = emailColumn;
+    }
+
+    public String getPasswordColumn() {
+        return passwordColumn;
+    }
+
+    public void setPasswordColumn(String passwordColumn) {
+        this.passwordColumn = passwordColumn;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public String getHost() {
         return host;
