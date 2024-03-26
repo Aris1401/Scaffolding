@@ -5,14 +5,13 @@ import scaffolding.generation.ScaffoldGenerateCode;
 import scaffolding.loader.ScaffoldLoader;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ScaffoldDatabaseInfomations {
     // Singleton
     private static ScaffoldDatabaseInfomations instance;
+
     public static ScaffoldDatabaseInfomations getInstance(ScaffoldingArguments scaffoldingArguments) {
         if (instance == null) {
             instance = new ScaffoldDatabaseInfomations();
@@ -29,6 +28,26 @@ public class ScaffoldDatabaseInfomations {
 
     public void setScaffoldingArguments(ScaffoldingArguments scaffoldingArguments) {
         this.scaffoldingArguments = scaffoldingArguments;
+    }
+
+    public static ArrayList<String> getAllAvailabeDatabaseConnections() {
+        Properties databaseProperties = ScaffoldLoader.getDatabaseProperties();
+
+        Set<String> databases = new HashSet<>();
+        for (String databaseName : databaseProperties.stringPropertyNames()) {
+            try {
+                String databasePropertyName = databaseName.strip();
+                String[] splittedProperties = databasePropertyName.split("\\.");
+
+                String database = splittedProperties[2];
+                database = database.substring(0, 1).toUpperCase() + database.substring(1);
+                databases.add(database);
+            } catch (Exception e) {
+                continue;
+            }
+        }
+
+        return (ArrayList<String>) databases.stream().collect(Collectors.toList());
     }
 
     public Connection loadConnection() {

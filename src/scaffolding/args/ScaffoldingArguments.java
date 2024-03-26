@@ -3,10 +3,10 @@ package scaffolding.args;
 import java.util.Arrays;
 
 public class ScaffoldingArguments {
-    String authentification;
+    boolean authentification;
     String tableName;
     String emailColumn;
-    String passWordColumn;
+    String passwordColumn;
     String host;
     String database;
     String databaseName;
@@ -19,12 +19,21 @@ public class ScaffoldingArguments {
     String framework;
     String view;
     String viewoutputdir;
+    boolean usePagination = false;
 
-    public String getAuthentification() {
+    public boolean isUsePagination() {
+        return usePagination;
+    }
+
+    public void setUsePagination(boolean usePagination) {
+        this.usePagination = usePagination;
+    }
+
+    public boolean getAuthentification() {
         return authentification;
     }
 
-    public void setAuthentification(String authentification) {
+    public void setAuthentification(boolean authentification) {
         this.authentification = authentification;
     }
 
@@ -50,14 +59,6 @@ public class ScaffoldingArguments {
 
     public void setPasswordColumn(String passwordColumn) {
         this.passwordColumn = passwordColumn;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
     }
 
     public String getHost() {

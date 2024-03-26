@@ -2,6 +2,7 @@ package scaffolding;
 
 import scaffolding.args.ScaffoldingArguments;
 import scaffolding.args.ScaffoldingCommandLineParser;
+import scaffolding.configurationInShell.ScaffoldingConfigurationInShell;
 import scaffolding.database.ScaffoldDatabaseInfomations;
 import scaffolding.database.ScaffoldDatabaseTableInfo;
 import scaffolding.generation.ScaffoldGenerateCode;
@@ -20,8 +21,8 @@ import java.util.Properties;
 public class ScaffoldDatabase {
     private static final String BASE_PACKAGE = "scaffolding.";
     public static void scaffoldDatabase(String[] args) {
-        ScaffoldingArguments scaffoldingArguments = ScaffoldingCommandLineParser.parseArgs(args);
-
+//        ScaffoldingArguments scaffoldingArguments = ScaffoldingCommandLineParser.parseArgs(args);
+            ScaffoldingArguments scaffoldingArguments = ScaffoldingConfigurationInShell.configureScaffolding();
         // Loading database
         ScaffoldDatabaseInfomations scaffoldDatabaseInfomations = ScaffoldDatabaseInfomations.getInstance(scaffoldingArguments);
 
