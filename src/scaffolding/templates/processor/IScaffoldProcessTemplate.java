@@ -73,15 +73,15 @@ public abstract class IScaffoldProcessTemplate {
     // Buffering purposes
     ArrayList<String> buffuredLines = new ArrayList<>();
 
-    void storeListVariable(String name, ArrayList<?> value) {
+    public void storeListVariable(String name, ArrayList<?> value) {
         mappedListVariables.put(name, value);
     }
 
-    void storeStringVariable(String name, String value) {
+    public void storeStringVariable(String name, String value) {
         mappedStringVariables.put(name, value);
     }
 
-    void storeObjectVariable(String name, Object value) {
+    public void storeObjectVariable(String name, Object value) {
         mappedObjectVariables.put(name, value);
     }
 

@@ -13,7 +13,8 @@ public class ScaffoldProcessViewServiceTemplate extends IScaffoldProcessTemplate
         storeStringVariable("class_name_lower", modelName);
         storeStringVariable("class_name", pascalCase(modelName));
 
-        storeListVariable("foreign_keys", foreignKeys);
+        if (!foreignKeys.isEmpty()) storeListVariable("foreign_keys", foreignKeys);
+        if (foreignKeys.isEmpty()) storeStringVariable("no_foreign_key", "true");
 
         // Obtenir primary key
         ScaffoldDatabaseTableInfo primaryKey = ScaffoldDatabaseInfomations.getInstance().getTablePrimaryKey(modelName);

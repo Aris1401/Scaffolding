@@ -20,6 +20,7 @@ public class ScaffoldingArguments {
     String view;
     String viewoutputdir;
     boolean usePagination = false;
+    String basePackage;
 
     public boolean isUsePagination() {
         return usePagination;
@@ -142,11 +143,21 @@ public class ScaffoldingArguments {
     }
 
     public String getModelPackage() {
-        return getNamespaceFrom(outputDir);
+        String modelPackage = "";
+
+        if (!getBasePackage().trim().isEmpty()) modelPackage += getBasePackage() + ".";
+        modelPackage += outputDir;
+
+        return modelPackage;
     }
 
     public String getControllerPackage() {
-        return getNamespaceFrom(controller);
+        String controllerPackage = "";
+
+        if (!getBasePackage().trim().isEmpty()) controllerPackage += getBasePackage() + ".";
+        controllerPackage += controller;
+
+        return controllerPackage;
     }
 
     public String getNamespaceFrom(String path) {
@@ -156,6 +167,21 @@ public class ScaffoldingArguments {
         namespace = namespace.replace("/", ".");
 
         return namespace;
+    }
+
+    public String getDirsBasePackage() {
+        String dir = "./src/res/";
+
+        if(!getBasePackage().trim().isEmpty()) dir += getBasePackage().replace(".", "/") + "/";
+        return dir;
+    }
+
+    public String getBasePackage() {
+        return basePackage;
+    }
+
+    public void setBasePackage(String basePackage) {
+        this.basePackage = basePackage;
     }
 
     public String getView(){
@@ -189,5 +215,46 @@ public class ScaffoldingArguments {
                 ", view= '" + view + '\'' +
                 ", viewoutputdir'" + viewoutputdir + '\'' +
                 '}';
+    }
+
+    public static ScaffoldingArguments getDefinedArgs() {
+        ScaffoldingArguments scaffoldingArguments = new ScaffoldingArguments();
+//        boolean authentification;
+//        String tableName;
+//        String emailColumn;
+//        String passwordColumn;
+//        String host;
+//        String database;
+//        String databaseName;
+//        String user;
+//        String password;
+//        String outputDir;
+//        String language;
+//        String[] models;
+//        String controller;
+//        String framework;
+//        String view;
+//        String viewoutputdir;
+//        boolean usePagination = false;
+
+        scaffoldingArguments.setAuthentification(true);
+        scaffoldingArguments.setTableName("Utilisateur");
+        scaffoldingArguments.setEmailColumn("email");
+        scaffoldingArguments.setPasswordColumn("mot_de_passe");
+        scaffoldingArguments.setHost("localhost");
+        scaffoldingArguments.setDatabase("postgres");
+        scaffoldingArguments.setDatabaseName("immobilier2");
+        scaffoldingArguments.setUser("postgres");
+        scaffoldingArguments.setPassword("root");
+        scaffoldingArguments.setBasePackage("com.scaffolding.test");
+        scaffoldingArguments.setOutputDir("models");
+        scaffoldingArguments.setLanguage("java");
+        scaffoldingArguments.setController("controllers");
+        scaffoldingArguments.setFramework("springboot");
+        scaffoldingArguments.setView("angular");
+        scaffoldingArguments.setViewoutputdir("./src/res/views");
+        scaffoldingArguments.setUsePagination(true);
+
+        return scaffoldingArguments;
     }
 }

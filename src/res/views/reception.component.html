@@ -1,0 +1,121 @@
+<h1>Gestion des receptions</h1>
+
+<button (click)="onCreate()" class="btn btn-primary" >Ajout de reception</button>
+
+<table class="table table-responsive">
+  <thead>
+    <tr>
+
+      <th>Anneeutilisation</th>
+      <th>DateReception</th>
+      <th>Prix</th>
+      <th>Taux</th>
+
+      <td>
+        Commande
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reception of receptions">
+
+      <td>{{ reception.anneeutilisation }}</td>
+      <td>{{ reception.dateReception }}</td>
+      <td>{{ reception.prix }}</td>
+      <td>{{ reception.taux }}</td>
+
+        <td>
+          {{ reception.commande ? reception.commande. : "" }}
+        </td>
+      <td>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="onEdit(reception)">Modifier</button>
+            <button class="btn btn-danger" (click)="onDelete(reception)">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example" class="d-flex gap-2 align-items-center justify-content-end">
+  <p>Total of elements: {{ totalOfElements }}</p>
+
+  <ul class="pagination justify-content-end">
+    <li class="page-item">
+      <a class="page-link" [class.disabled]="isFirstPage" (click)="previousPage()" tabindex="-1" href="javascript:void(0);">Previous</a>
+    </li>
+    <li class="page-item" *ngFor="let i of generateRange()" ><a class="page-link" [class.active]="i == currentPage" (click)="switchPage(i + 1)" href="javascript:void(0);">{{ i + 1 }}</a></li>
+    <li class="page-item">
+      <a class="page-link" [class.disabled]="isLastPage" (click)="nextPage()" href="javascript:void(0);">Next</a>
+    </li>
+  </ul>
+</nav>
+
+<div [class.show-modal]="isCreateModalOpen" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+              <h2>Ajouter reception</h2>
+              <button class="btn btn-close" (click)="onCloseCreateModal()"></button>
+            </div>
+
+            <form (submit)="onSubmitCreate()">
+            <div class="modal-body">
+
+                  <label for="anneeutilisation">Anneeutilisation:</label>
+                  <input class="form-control" type="number" id="anneeutilisation" name="anneeutilisation" [(ngModel)]="newReception.anneeutilisation" required>
+                  <label for="dateReception">DateReception:</label>
+                  <input class="form-control" type="datetime" id="dateReception" name="dateReception" [(ngModel)]="newReception.dateReception" required>
+                  <label for="prix">Prix:</label>
+                  <input class="form-control" type="number" id="prix" name="prix" [(ngModel)]="newReception.prix" required>
+                  <label for="taux">Taux:</label>
+                  <input class="form-control" type="number" id="taux" name="taux" [(ngModel)]="newReception.taux" required>
+
+                  <select class="form-control" name="idCommande" [(ngModel)]="newReception.idCommande">
+                    <option *ngFor="let commande of commandes" value="{{ commande.idCommande }}">{{ commande. }}</option>
+                  </select>
+            </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Ajouter</button>
+            </div>
+            </form>
+          </div>
+    </div>
+</div>
+
+<div [class.show-modal]="isEditModalOpen" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h2>Modifier reception</h2>
+              <button (click)="onCloseEditModal()" class="btn btn-close" ></button>
+            </div>
+
+            <form class="d-flex gap-2 flex-column" (submit)="onSubmitEdit()">
+                <div class="modal-body">
+
+                  <label for="anneeutilisation">Anneeutilisation:</label>
+                  <input class="form-control" type="number" id="anneeutilisation" name="anneeutilisation" [(ngModel)]="editedReception.anneeutilisation" required>
+                  <label for="dateReception">DateReception:</label>
+                  <input class="form-control" type="datetime" id="dateReception" name="dateReception" [(ngModel)]="editedReception.dateReception" required>
+                  <label for="prix">Prix:</label>
+                  <input class="form-control" type="number" id="prix" name="prix" [(ngModel)]="editedReception.prix" required>
+                  <label for="taux">Taux:</label>
+                  <input class="form-control" type="number" id="taux" name="taux" [(ngModel)]="editedReception.taux" required>
+
+                    <select class="form-control" name="idCommande" [(ngModel)]="editedReception.idCommande">
+                      <option *ngFor="let commande of commandes" value="{{ commande.idCommande }}">{{ commande. }}</option>
+                    </select>
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn btn-primary" type="submit">Modifier</button>
+                </div>
+            </form>
+          </div>
+    </div>
+</div>

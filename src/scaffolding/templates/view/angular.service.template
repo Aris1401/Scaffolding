@@ -41,6 +41,7 @@ export class #{class_name_camel}Service {
       const #{foreign_keys:columnName}$ = this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}ById(#{class_name_lower}WithoutId.#{foreign_keys:columnName});
       #{endfor}
 
+      #{if} isset:foreign_keys
       // Combine all observables into a single observable using forkJoin
       return forkJoin([
           #{for} #{foreign_keys}
@@ -57,6 +58,11 @@ export class #{class_name_camel}Service {
               return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower}WithoutId);
           })
       );
+      #{endif}
+
+      #{if} isset:no_foreign_key
+      return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower}WithoutId);
+      #{endif}
   }
 
   update#{class_name_camel}(id: string, #{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {
@@ -64,6 +70,7 @@ export class #{class_name_camel}Service {
       const #{foreign_keys:columnName}$ = this.#{foreign_keys:columnTypeProcessed}Service.get#{foreign_keys:columnTypePascal}ById(#{class_name_lower}.#{foreign_keys:columnName});
       #{endfor}
 
+      #{if} isset:foreign_keys
       // Combine all observables into a single observable using forkJoin
       return forkJoin([
           #{for} #{foreign_keys}
@@ -80,8 +87,12 @@ export class #{class_name_camel}Service {
               return this.http.post<#{class_name_camel}>(baseUrl, #{class_name_lower});
           })
       );
+      #{endif}
 
+
+    #{if} isset:no_foreign_key
     return this.http.put<#{class_name_camel}>(`${baseUrl}/${id}`, #{class_name_lower});
+    #{endif}
   }
 
    delete#{class_name_camel}(id : string): Observable<void> {
