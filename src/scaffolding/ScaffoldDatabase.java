@@ -21,8 +21,8 @@ import java.util.Properties;
 public class ScaffoldDatabase {
     private static final String BASE_PACKAGE = "scaffolding.";
     public static void scaffoldDatabase(String[] args) {
-//        ScaffoldingArguments scaffoldingArguments = ScaffoldingCommandLineParser.parseArgs(args);
-            ScaffoldingArguments scaffoldingArguments = ScaffoldingConfigurationInShell.configureScaffolding();
+        ScaffoldingArguments scaffoldingArguments = ScaffoldingCommandLineParser.parseArgs(args);
+//            ScaffoldingArguments scaffoldingArguments = ScaffoldingConfigurationInShell.configureScaffolding();
         // Loading database
         ScaffoldDatabaseInfomations scaffoldDatabaseInfomations = ScaffoldDatabaseInfomations.getInstance(scaffoldingArguments);
 

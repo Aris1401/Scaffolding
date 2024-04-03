@@ -368,7 +368,7 @@ public abstract class IScaffoldProcessTemplate {
                 invokedMethod.setAccessible(true);
                 return invokedMethod.invoke(invokedObject).toString();
             } catch (Exception e) {
-                throw new RuntimeException("Failed on call: " + call + " | Variable name: " + variableName + "\nWith error: " + e.getMessage());
+                throw new RuntimeException("Failed on call: " + call + " | Variable name: " + variableName + "\nWith error: " + e.getMessage() + "\nIn template: " + getCurrentTemplatePath());
             }
         } else {
             try {

@@ -30,6 +30,14 @@ export class #{class_name_camel}Component implements OnInit {
   #{foreign_keys:columnTypeProcessed}s : #{foreign_keys:columnTypePascal}[] = []
   #{endfor}
 
+    // Pagination
+    totalOfPages : number = 0
+    totalOfElements : number = 0
+    currentPage : number = 0
+
+    isFirstPage  = false
+    isLastPage = false
+
   constructor(
     #{for} #{foreign_keys}
     private #{foreign_keys:columnTypeProcessed}Service : #{foreign_keys:columnTypePascal}Service,
@@ -44,12 +52,44 @@ export class #{class_name_camel}Component implements OnInit {
     #{endfor}
   }
 
-  get#{class_name_camel}s(): void {
-    this.#{class_name_lower}Service.get#{class_name_camel}s().subscribe({
+  // Pagination
+    generateRange(): number[] {
+      return Array(this.totalOfPages).fill(0).map((x, i) => i);
+    }
+
+    switchPage(page : number) {
+      this.#{class_name_lower}Service.get#{class_name_camel}sPages(page).subscribe({
         next: (data) => {
-            this.#{class_name_lower}s = data
+          this.#{class_name_lower}s = data.content
+
+          // Pagination
+          this.totalOfPages = data.totalPages
+          this.totalOfElements = data.totalElements
+          this.currentPage = data.number
+
+          this.isFirstPage = data.first
+          this.isLastPage = data.last
         }
-    });
+      })
+    }
+
+    previousPage() {
+      let previousPageNumber = this.currentPage;
+      if (previousPageNumber < 1) previousPageNumber = 1;
+
+      this.switchPage(previousPageNumber);
+    }
+
+    nextPage() {
+      let nextPageNumber = this.currentPage + 2;
+      if (nextPageNumber > this.totalOfPages) nextPageNumber = this.totalOfPages;
+
+      this.switchPage(nextPageNumber);
+    }
+    // End pagination
+
+  get#{class_name_camel}s(): void {
+    this.switchPage(1)
   }
 
   #{for} #{foreign_keys}

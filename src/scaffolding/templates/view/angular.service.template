@@ -26,8 +26,12 @@ export class #{class_name_camel}Service {
     return this.http.get<#{class_name_camel}>(`${baseUrl}/${id}`)
   }
 
-  get#{class_name_camel}s(): Observable<#{class_name_camel}[]> {
-    return this.http.get<#{class_name_camel}[]>(baseUrl);
+  get#{class_name_camel}s(): Observable<any> {
+    return this.http.get<any>(baseUrl);
+  }
+
+  get#{class_name_camel}sPages(page : number) : Observable<any> {
+        return this.http.get<any>(`${baseUrl}/p/${page}`)
   }
 
   create#{class_name_camel}(#{class_name_lower}: #{class_name_camel}): Observable<#{class_name_camel}> {

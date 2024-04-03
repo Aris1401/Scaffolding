@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 #{endif}
 
 #{if} language:dotnet
@@ -43,6 +47,12 @@ public class #{class_name}Controller {
     @GetMapping("")
     public List<#{class_name}> getAll#{class_name}() {
         return #{class_name_camel}Service.getAll#{class_name}();
+    }
+
+    @GetMapping(path = "/p/{page}")
+    public Page<#{class_name}> getAll#{class_name}Page(@PathVariable(name = "page") int page) {
+        Pageable paging = PageRequest.of(page - 1, 5);
+        return #{class_name_camel}Service.getAll#{class_name}Page(paging);
     }
 
     @GetMapping("/{id}")
