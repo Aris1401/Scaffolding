@@ -29,6 +29,12 @@ public class AuthFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
         String currentURI = request.getRequestURI();
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            // Allow OPTIONS requests to pass through without authentication
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Getting the session
         HttpSession session = request.getSession(false);
 

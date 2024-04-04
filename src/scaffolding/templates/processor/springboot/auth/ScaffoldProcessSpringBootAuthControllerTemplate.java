@@ -23,5 +23,7 @@ public class ScaffoldProcessSpringBootAuthControllerTemplate extends IScaffoldPr
 		storeStringVariable("auth_table_class_name", pascalCase(processModelName(authTable)));
 		storeStringVariable("auth_table_lower_name", camelCase(processModelName(authTable)));
 
+		storeStringVariable("base_package", basePackage);
+
 	}
 }

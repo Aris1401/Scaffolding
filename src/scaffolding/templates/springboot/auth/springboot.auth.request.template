@@ -1,4 +1,4 @@
-package com.scaffolding.test.auth;
+package #{base_package}.auth;
 
 public class LoginRequest {
     String loginName;

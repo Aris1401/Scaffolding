@@ -1,4 +1,4 @@
-package com.scaffolding.test.filter;
+package #{base_package}.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +30,12 @@ public class AuthFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String currentURI = request.getRequestURI();
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            // Allow OPTIONS requests to pass through without authentication
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // Getting the session
         HttpSession session = request.getSession(false);

@@ -25,16 +25,16 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "auth", scaffoldingArguments.getLanguage(), authControllerName, authControllerCodeLines);
 
             // Login request
-            ArrayList<String> loginRequestCodeLiens = new ScaffoldProcessSpringBootAuthRequestTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+            ArrayList<String> loginRequestCodeLiens = new ScaffoldProcessSpringBootAuthRequestTemplate(scaffoldingArguments.getBasePackage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
             String loginRequestName = "LoginRequest";
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "auth", scaffoldingArguments.getLanguage(), loginRequestName, loginRequestCodeLiens);
 
             // Configuration
-            ArrayList<String> corsConfigurationCodeLines = new ScaffoldProcessSpringBootCORSConfigurationTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+            ArrayList<String> corsConfigurationCodeLines = new ScaffoldProcessSpringBootCORSConfigurationTemplate(scaffoldingArguments.getBasePackage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "configuration", scaffoldingArguments.getLanguage(), "CORSConfig", corsConfigurationCodeLines);
 
             // Filter
-            ArrayList<String> authFilterCodeLines = new ScaffoldProcessSpringBootAuthFilterTemplate(scaffoldingArguments.getTableName(), scaffoldingArguments.getModelPackage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+            ArrayList<String> authFilterCodeLines = new ScaffoldProcessSpringBootAuthFilterTemplate(scaffoldingArguments.getTableName(), scaffoldingArguments.getModelPackage(), scaffoldingArguments.getBasePackage()).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "filter", scaffoldingArguments.getLanguage(), "AuthFilter", authFilterCodeLines);
         }
     }

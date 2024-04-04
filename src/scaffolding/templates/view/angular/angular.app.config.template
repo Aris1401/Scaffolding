@@ -1,0 +1,21 @@
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter, withDebugTracing } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { authInterceptorProvider } from './interceptors/AuthInterceptor';
+import { withCredentialsInterceptorProvider } from './interceptors/WithCredentialsInterceptor';
+
+export const appConfig: ApplicationConfig = {
+	providers: [
+			provideRouter(routes),
+			provideClientHydration(),
+			provideHttpClient(
+				withFetch(),
+				withInterceptorsFromDi()
+			),
+			withCredentialsInterceptorProvider,
+			authInterceptorProvider
+			]
+};
