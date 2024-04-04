@@ -22,6 +22,7 @@ import scaffolding.templates.processor.angular.auth.ScaffoldProcessAngularLoginS
 import scaffolding.templates.processor.angular.interceptor.ScaffoldProcessAngularInterceptorAuthTemplate;
 import scaffolding.templates.processor.angular.interceptor.ScaffoldProcessAngularInterceptorCredentialsTemplate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -37,45 +38,48 @@ public class ScaffoldDatabase {
         ScaffoldDatabaseInfomations scaffoldDatabaseInfomations = ScaffoldDatabaseInfomations.getInstance(scaffoldingArguments);
 
         try {
-            if (scaffoldingArguments.getFramework() == null || scaffoldingArguments.getFramework().isEmpty()) {
-                BaseFrameworkGenerator baseGenerator = new BaseFrameworkGenerator();
-                baseGenerator.generateFramework(scaffoldDatabaseInfomations, scaffoldingArguments);
-            } else {
-                final String BASE_FRAMEWORK_GENERATOR_PROPERTIES = "scaffold.framework.";
-
-                // Framework correspondant
-                Properties frameworkGeneratorProperties = ScaffoldLoader.getFrameworkGeneratorProperties();
-                String generatorPath = frameworkGeneratorProperties.getProperty(BASE_FRAMEWORK_GENERATOR_PROPERTIES + scaffoldingArguments.getFramework());
-
-                // Getting the class
-                Class<?> generator = Class.forName(BASE_PACKAGE + generatorPath);
-
-                // Invoke the method
-                IFrameworkGenerator frameworkGenerator = (IFrameworkGenerator) generator.getDeclaredConstructor().newInstance();
-                frameworkGenerator.generateFramework(scaffoldDatabaseInfomations, scaffoldingArguments);
-            }
+            handleFrameworkGeneration(scaffoldingArguments);
 
             // Generating views
-            if(!scaffoldingArguments.getView().trim().isEmpty() && scaffoldingArguments.getView() != null) {
-                if (!scaffoldingArguments.getViewoutputdir().isEmpty()) {
-                    final String BASE_VIEW_GENERATOR_PROPERTIES = "scaffold.view.";
-
-                    // View correspondant
-                    Properties frameworkGeneratorProperties = ScaffoldLoader.getViewGeneratorProperties();
-                    String generatorPath = frameworkGeneratorProperties.getProperty(BASE_VIEW_GENERATOR_PROPERTIES + scaffoldingArguments.getView());
-
-                    // Getting the class
-                    Class<?> generator = Class.forName(generatorPath);
-
-                    // Instancing
-                    IViewGenerator viewGenerator = (IViewGenerator) generator.getDeclaredConstructor().newInstance();
-                    viewGenerator.generateView(scaffoldingArguments);
-                } else {
-                    throw new RuntimeException("Chemin specifier pour generer les views: " + scaffoldingArguments.getView() + " non specifiee.");
-                }
-            }
+            handleViewGeneration(scaffoldingArguments);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void handleFrameworkGeneration(ScaffoldingArguments scaffoldingArguments) throws Exception {
+        if (scaffoldingArguments.getFramework() == null || scaffoldingArguments.getFramework().isEmpty()) {
+            BaseFrameworkGenerator baseGenerator = new BaseFrameworkGenerator();
+            baseGenerator.generateFramework(ScaffoldDatabaseInfomations.getInstance(), scaffoldingArguments);
+        } else {
+            final String BASE_FRAMEWORK_GENERATOR_PROPERTIES = "scaffold.framework.";
+
+            // Invoke the method
+            IFrameworkGenerator frameworkGenerator = getDesignatedGenerator(BASE_FRAMEWORK_GENERATOR_PROPERTIES, BASE_PACKAGE, ScaffoldLoader.getFrameworkGeneratorProperties(), scaffoldingArguments.getFramework());
+            frameworkGenerator.generateFramework(ScaffoldDatabaseInfomations.getInstance(), scaffoldingArguments);
+        }
+    }
+
+    public static void handleViewGeneration(ScaffoldingArguments scaffoldingArguments) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if(!scaffoldingArguments.getView().trim().isEmpty() && scaffoldingArguments.getView() != null) {
+            if (!scaffoldingArguments.getViewoutputdir().isEmpty()) {
+                final String BASE_VIEW_GENERATOR_PROPERTIES = "scaffold.view.";
+
+                IViewGenerator viewGenerator = getDesignatedGenerator(BASE_VIEW_GENERATOR_PROPERTIES, "", ScaffoldLoader.getViewGeneratorProperties(), scaffoldingArguments.getView());
+                viewGenerator.generateView(scaffoldingArguments);
+            } else {
+                throw new RuntimeException("Chemin specifier pour generer les views: " + scaffoldingArguments.getView() + " non specifiee.");
+            }
+        }
+    }
+
+    public static<T>  T getDesignatedGenerator(String baseProperties, String basePathPackage, Properties generatorProperties, String type) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        String generatorPath = generatorProperties.getProperty(baseProperties + type);
+
+        // Getting the class
+        Class<?> generator = Class.forName(basePathPackage + generatorPath);
+
+        // Instancing
+		return (T) generator.getDeclaredConstructor().newInstance();
     }
 }

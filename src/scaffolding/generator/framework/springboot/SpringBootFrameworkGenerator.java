@@ -48,7 +48,7 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
             // Generation de repository
             String repositoryPackage = scaffoldingArguments.getBasePackage() + ".repository";
             ArrayList<String> repositoryCodeLines = new ScaffoldProcessRepositoryTemplate(model, repositoryPackage, scaffoldingArguments.getModelPackage())
-                    .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                                                    .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String repositoryName = fileName + "Repository";
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "repository", scaffoldingArguments.getLanguage(), repositoryName, repositoryCodeLines);
@@ -56,7 +56,7 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
             // Generation de service
             String servicesPackage = scaffoldingArguments.getBasePackage() + ".service";
             ArrayList<String> serviceCodeLines = new ScaffoldProcessServiceTemplate(model, servicesPackage, scaffoldingArguments.getModelPackage(), repositoryPackage)
-                    .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                                                .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String serviceName = fileName + "Service";
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + "service", scaffoldingArguments.getLanguage(), serviceName, serviceCodeLines);
@@ -66,7 +66,7 @@ public class SpringBootFrameworkGenerator extends BaseFrameworkGenerator {
             System.out.println("Creation controllers...");
 
             ArrayList<String> controllerCodeLines = new ScaffoldProcessControllerTemplate(model, scaffoldingArguments.getControllerPackage(), scaffoldingArguments.getModelPackage(), servicesPackage)
-                    .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
+                                                    .processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
 
             String controllerName = fileName + "Controller";
             ScaffoldGenerateCode.generateCodeInPath(scaffoldingArguments.getDirsBasePackage() + scaffoldingArguments.getController(), scaffoldingArguments.getLanguage(), controllerName, controllerCodeLines);
