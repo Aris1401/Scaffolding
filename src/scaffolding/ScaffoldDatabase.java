@@ -6,6 +6,8 @@ import scaffolding.configurationInShell.ScaffoldingConfigurationInShell;
 import scaffolding.database.ScaffoldDatabaseInfomations;
 import scaffolding.database.ScaffoldDatabaseTableInfo;
 import scaffolding.generation.ScaffoldGenerateCode;
+import scaffolding.generator.view.IViewGenerator;
+import scaffolding.generator.view.angular.AngularViewGenerator;
 import scaffolding.templates.processor.ScaffoldProcessViewComponentTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewCssTemplate;
 import scaffolding.templates.processor.ScaffoldProcessViewHTMLTemplate;
@@ -53,73 +55,23 @@ public class ScaffoldDatabase {
                 frameworkGenerator.generateFramework(scaffoldDatabaseInfomations, scaffoldingArguments);
             }
 
-            String[] models = scaffoldDatabaseInfomations.getDatabaseTableNames();
-            for (String model : models) {
-                if (model.toLowerCase().startsWith("v_")) continue;
-                // Creation de view
-                ArrayList<ScaffoldDatabaseTableInfo> fields = scaffoldDatabaseInfomations.getColumns(model);
-                ScaffoldDatabaseTableInfo.addLanguagesFor("ts", fields);
-                if(scaffoldingArguments.getView() != null && !scaffoldingArguments.getViewoutputdir().isEmpty()) {
-                    if(scaffoldingArguments.getView().compareTo("angular")==0){
-                        System.out.println(model.toUpperCase() + ": Creation views...");
+            // Generating views
+            if(!scaffoldingArguments.getView().trim().isEmpty() && scaffoldingArguments.getView() != null) {
+                if (!scaffoldingArguments.getViewoutputdir().isEmpty()) {
+                    final String BASE_VIEW_GENERATOR_PROPERTIES = "scaffold.view.";
 
-                        // COMPONENT
-                        ArrayList<String> viewComponentCodeLines = new ScaffoldProcessViewComponentTemplate(fields, model, "").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String viewComponentName = model + ".component";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewComponentName, viewComponentCodeLines);
-                        System.out.println("Component create successfully...");
+                    // View correspondant
+                    Properties frameworkGeneratorProperties = ScaffoldLoader.getViewGeneratorProperties();
+                    String generatorPath = frameworkGeneratorProperties.getProperty(BASE_VIEW_GENERATOR_PROPERTIES + scaffoldingArguments.getView());
 
-                        // CSS
-                        ArrayList<String> viewCssCodeLines = new ScaffoldProcessViewCssTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String viewCssName = model + ".component";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".css", viewCssName, viewCssCodeLines);
+                    // Getting the class
+                    Class<?> generator = Class.forName(generatorPath);
 
-                        // HTML
-                        ArrayList<String> viewHtmlCodeLines = new ScaffoldProcessViewHTMLTemplate(fields, model).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String viewHtmlName = model + ".component";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".html", viewHtmlName, viewHtmlCodeLines);
-                        System.out.println("Html & Css create successfully...");
-
-                        // MODEL
-                        ArrayList<String> viewModelCodeLines = new ScaffoldProcessViewModelTemplate(fields, model).processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String viewModelName = model + ".model";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewModelName, viewModelCodeLines);
-                        System.out.println("Model create successfully...");
-
-                        // SERVICE
-                        ArrayList<String> viewServiceCodeLines = new ScaffoldProcessViewServiceTemplate(model,"").processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String viewServiceName = model + ".service";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir(), ".ts", viewServiceName, viewServiceCodeLines);
-                        System.out.println("Service create successfully...");
-                    }
-                }
-            }
-
-            if (scaffoldingArguments.getAuthentification()) {
-                if(scaffoldingArguments.getView() != null && !scaffoldingArguments.getViewoutputdir().isEmpty()) {
-                    if(scaffoldingArguments.getView().compareTo("angular")==0){
-                        // Component
-                        ArrayList<String> componentCodeLines = new ScaffoldProcessAngularLoginComponentTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String loginComponentName = "login.component";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir() + "/auth", ".ts", loginComponentName, componentCodeLines);
-
-                        // HTML
-                        ArrayList<String> htmlCodeLines = new ScaffoldProcessAngularLoginHtmlTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String loginHtmlName = "login.component";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir() + "/auth", ".html", loginHtmlName, htmlCodeLines);
-
-                        // Service
-                        ArrayList<String> serviceCodeLines = new ScaffoldProcessAngularLoginServiceTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        String loginServiceName = "login.service";
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir() + "/auth", ".ts", loginServiceName, serviceCodeLines);
-
-                        /// --------------- INTERCPETORS
-                        ArrayList<String> authInterceptorCodeLines = new ScaffoldProcessAngularInterceptorAuthTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir() + "/interceptors", ".ts", "AuthInterceptor", authInterceptorCodeLines);
-
-                        ArrayList<String> credentialsInterceptorCodeLines = new ScaffoldProcessAngularInterceptorCredentialsTemplate().processTemplate(scaffoldingArguments.getLanguage(), scaffoldingArguments.getFramework());
-                        ScaffoldGenerateCode.generateCodeInPathWithExtension(scaffoldingArguments.getViewoutputdir() + "/interceptors", ".ts", "WithCredentialsInterceptor", credentialsInterceptorCodeLines);
-                    }
+                    // Instancing
+                    IViewGenerator viewGenerator = (IViewGenerator) generator.getDeclaredConstructor().newInstance();
+                    viewGenerator.generateView(scaffoldingArguments);
+                } else {
+                    throw new RuntimeException("Chemin specifier pour generer les views: " + scaffoldingArguments.getView() + " non specifiee.");
                 }
             }
         } catch (Exception e) {

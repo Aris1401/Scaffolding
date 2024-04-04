@@ -6,6 +6,8 @@ import scaffolding.database.ScaffoldDatabaseInfomations;
 public class BaseViewGenerator implements IViewGenerator{
 	@Override
 	public boolean generateView(ScaffoldingArguments scaffoldingArguments) {
+		if(scaffoldingArguments.getView() == null && scaffoldingArguments.getViewoutputdir().isEmpty()) return false;
+
 		processOnce(scaffoldingArguments);
 
 		String[] models = ScaffoldDatabaseInfomations.getInstance().getDatabaseTableNames();

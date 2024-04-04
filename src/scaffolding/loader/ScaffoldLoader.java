@@ -54,4 +54,8 @@ public class ScaffoldLoader {
     public static Properties getFrameworkGeneratorProperties() {
         return getConfiguationProperties("scaffoldFrameworkGenerator");
     }
+
+    public static Properties getViewGeneratorProperties() {
+        return getConfiguationProperties("scaffoldViewGenerator");
+    }
 }
