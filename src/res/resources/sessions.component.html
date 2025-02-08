@@ -1,0 +1,115 @@
+<h1>Gestion des sessionss</h1>
+
+<button (click)="onCreate()" class="btn btn-primary" >Ajout de sessions</button>
+
+<table class="table table-responsive">
+  <thead>
+    <tr>
+
+      <th>UserId</th>
+      <th>IpAddress</th>
+      <th>UserAgent</th>
+      <th>Payload</th>
+      <th>LastActivity</th>
+
+      <td></td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sessions of sessionss">
+
+      <td>{{ sessions.userId }}</td>
+      <td>{{ sessions.ipAddress }}</td>
+      <td>{{ sessions.userAgent }}</td>
+      <td>{{ sessions.payload }}</td>
+      <td>{{ sessions.lastActivity }}</td>
+
+      <td>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="onEdit(sessions)">Modifier</button>
+            <button class="btn btn-danger" (click)="onDelete(sessions)">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example" class="d-flex gap-2 align-items-center justify-content-end">
+  <p>Total of elements: {{ totalOfElements }}</p>
+
+  <ul class="pagination justify-content-end">
+    <li class="page-item">
+      <a class="page-link" [class.disabled]="isFirstPage" (click)="previousPage()" tabindex="-1" href="javascript:void(0);">Previous</a>
+    </li>
+    <li class="page-item" *ngFor="let i of generateRange()" ><a class="page-link" [class.active]="i == currentPage" (click)="switchPage(i + 1)" href="javascript:void(0);">{{ i + 1 }}</a></li>
+    <li class="page-item">
+      <a class="page-link" [class.disabled]="isLastPage" (click)="nextPage()" href="javascript:void(0);">Next</a>
+    </li>
+  </ul>
+</nav>
+
+<div [class.show-modal]="isCreateModalOpen" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+              <h2>Ajouter sessions</h2>
+              <button class="btn btn-close" (click)="onCloseCreateModal()"></button>
+            </div>
+
+            <form (submit)="onSubmitCreate()">
+            <div class="modal-body">
+
+                  <label for="userId">UserId:</label>
+                  <input class="form-control" type="bigint" id="userId" name="userId" [(ngModel)]="newSessions.userId" required>
+                  <label for="ipAddress">IpAddress:</label>
+                  <input class="form-control" type="text" id="ipAddress" name="ipAddress" [(ngModel)]="newSessions.ipAddress" required>
+                  <label for="userAgent">UserAgent:</label>
+                  <input class="form-control" type="text" id="userAgent" name="userAgent" [(ngModel)]="newSessions.userAgent" required>
+                  <label for="payload">Payload:</label>
+                  <input class="form-control" type="text" id="payload" name="payload" [(ngModel)]="newSessions.payload" required>
+                  <label for="lastActivity">LastActivity:</label>
+                  <input class="form-control" type="number" id="lastActivity" name="lastActivity" [(ngModel)]="newSessions.lastActivity" required>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Ajouter</button>
+            </div>
+            </form>
+          </div>
+    </div>
+</div>
+
+<div [class.show-modal]="isEditModalOpen" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h2>Modifier sessions</h2>
+              <button (click)="onCloseEditModal()" class="btn btn-close" ></button>
+            </div>
+
+            <form class="d-flex gap-2 flex-column" (submit)="onSubmitEdit()">
+                <div class="modal-body">
+
+                  <label for="userId">UserId:</label>
+                  <input class="form-control" type="bigint" id="userId" name="userId" [(ngModel)]="editedSessions.userId" required>
+                  <label for="ipAddress">IpAddress:</label>
+                  <input class="form-control" type="text" id="ipAddress" name="ipAddress" [(ngModel)]="editedSessions.ipAddress" required>
+                  <label for="userAgent">UserAgent:</label>
+                  <input class="form-control" type="text" id="userAgent" name="userAgent" [(ngModel)]="editedSessions.userAgent" required>
+                  <label for="payload">Payload:</label>
+                  <input class="form-control" type="text" id="payload" name="payload" [(ngModel)]="editedSessions.payload" required>
+                  <label for="lastActivity">LastActivity:</label>
+                  <input class="form-control" type="number" id="lastActivity" name="lastActivity" [(ngModel)]="editedSessions.lastActivity" required>
+
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn btn-primary" type="submit">Modifier</button>
+                </div>
+            </form>
+          </div>
+    </div>
+</div>

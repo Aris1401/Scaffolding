@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\#{class_name};
+use Illuminate\Http\Request;
+
+class #{class_name}Controller extends Controller
+{
+    public function index() {
+        $#{class_name_lower}s = #{class_name}::paginate(10);
+
+        return view("crud.#{class_name_lower}s.index", ["#{class_name_lower}s" => $#{class_name_lower}s]);
+    }
+
+    public function create() {
+        return view("crud.#{class_name_lower}s.create");
+    }
+
+    public function store(Request $request) {
+        $#{class_name_lower} = #{class_name}::create([
+            #{for} #{fillable}
+            "#{fillable:rawColumnName}" => $request->input("#{fillable:rawColumnName}")
+            #{endfor}
+        ]);
+
+        return redirect()->route("#{class_name_lower}s.index")->with("success","#{class_name} inserer.");
+    }
+
+    public function edit($id) {
+        $#{class_name_lower} = #{class_name}::find($id);
+
+        return view("crud.#{class_name_lower}s.edit", ["#{class_name_lower}"=> $#{class_name_lower}]);
+    }
+
+    public function update(Request $request, $id) {
+        $#{class_name_lower} = #{class_name}::find($id);
+        $#{class_name_lower}->update([
+            #{for} #{fillable}
+            "#{fillable:rawColumnName}"=> $request->input("#{fillable:rawColumnName}")
+            #{endfor}
+        ]);
+
+        return redirect()->route("#{class_name_lower}s.index")->with("success","#{class_name} mis ajour");
+    }
+
+    public function destroy($id) {
+        $#{class_name_lower} = #{class_name}::find($id);
+        $#{class_name_lower}->delete();
+
+        return redirect()->route("#{class_name_lower}s.index")->with("success","#{class_name} supprimer");
+    }
+}

@@ -58,6 +58,10 @@ public class ScaffoldingConfigurationInShell{
 
 		System.out.println("Language : ");
 		String language = scanner.nextLine();
+
+		System.out.println("Base package: ");
+		String basePackage = scanner.nextLine();
+
 		System.out.println("Output directory : ");
 		String outputDir = scanner.nextLine();
 
@@ -98,6 +102,7 @@ public class ScaffoldingConfigurationInShell{
 		scaffoldingArguments.setDatabaseName(databaseName);
 		scaffoldingArguments.setUser(user);
 		scaffoldingArguments.setPassword(password);
+		scaffoldingArguments.setBasePackage(basePackage);
 		scaffoldingArguments.setOutputDir(outputDir);
 		scaffoldingArguments.setLanguage(language);
 		scaffoldingArguments.setController(controller);

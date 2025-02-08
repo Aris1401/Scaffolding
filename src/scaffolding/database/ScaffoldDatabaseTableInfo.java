@@ -96,6 +96,7 @@ public class ScaffoldDatabaseTableInfo {
         return IScaffoldProcessTemplate.processModelName(foreignKeyTo);
     }
     public String getForeignKeyId() { return IScaffoldProcessTemplate.processModelName(foreignKeyId); }
+    public String getRawForeignKeyId() { return foreignKeyId; }
 
     public String getForeignKeyFirstStringColumn() {
         ArrayList<ScaffoldDatabaseTableInfo> fields = ScaffoldDatabaseInfomations.getInstance().getColumns(columnType);

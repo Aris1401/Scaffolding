@@ -237,22 +237,23 @@ public class ScaffoldingArguments {
 //        String viewoutputdir;
 //        boolean usePagination = false;
 
-        scaffoldingArguments.setAuthentification(true);
+        scaffoldingArguments.setAuthentification(false);
         scaffoldingArguments.setTableName("Utilisateur");
         scaffoldingArguments.setEmailColumn("email");
         scaffoldingArguments.setPasswordColumn("mot_de_passe");
+
         scaffoldingArguments.setHost("localhost");
         scaffoldingArguments.setDatabase("postgres");
-        scaffoldingArguments.setDatabaseName("immobilier2");
+        scaffoldingArguments.setDatabaseName("home_renovation");
         scaffoldingArguments.setUser("postgres");
         scaffoldingArguments.setPassword("root");
-        scaffoldingArguments.setBasePackage("com.scaffolding.test");
-        scaffoldingArguments.setOutputDir("models");
+        scaffoldingArguments.setBasePackage("app");
+        scaffoldingArguments.setOutputDir("Models");
         scaffoldingArguments.setLanguage("java");
-        scaffoldingArguments.setController("controllers");
-        scaffoldingArguments.setFramework("springboot");
+        scaffoldingArguments.setController("Http/Controllers");
+        scaffoldingArguments.setFramework("laravel");
         scaffoldingArguments.setView("angular");
-        scaffoldingArguments.setViewoutputdir("./src/res/views");
+        scaffoldingArguments.setViewoutputdir("./src/res/resources");
         scaffoldingArguments.setUsePagination(true);
 
         return scaffoldingArguments;

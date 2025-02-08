@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Kyslik\ColumnSortable\Sortable;
+
+class #{class_name} extends Model
+{
+    use Sortable;
+
+    protected $table = '#{class_name_lower}';
+    public $timestamps = false;
+
+    protected $primaryKey = '#{primary_key}';
+    protected $fillable = [
+        #{for} #{fillable}
+        '#{fillable:rawColumnName}',
+        #{endfor}
+    ];
+
+    public $sortable = [
+        #{for} #{fillable}
+        '#{fillable:rawColumnName}',
+        #{endfor}
+    ];
+
+    #{for} #{foreign_keys}
+    public function #{foreign_keys:columnTypeProcessed}() : BelongsTo {
+        return $this->belongsTo(#{foreign_keys:columnTypePascal}::class, '#{foreign_keys:rawColumnName}', '#{foreign_keys:rawForeignKeyId}');
+    }
+    #{endfor}
+}
